@@ -7,5 +7,13 @@
   "display": "standalone",
   "background_color": "#f3f6f7",
   "theme_color": "#243d51",
-  "icons": []
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "description": "Programação e agenda personalizada do CONAHP 2026"
 }
