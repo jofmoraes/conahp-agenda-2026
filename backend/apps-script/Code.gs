@@ -75,6 +75,7 @@ function doPost(e) {
     const persisted=preferences(ss,profile.id).find(p=>p.sessionId===input.sessionId);
     if(!persisted)throw new Error('Persistência não confirmada');
     for(const key of ['interest','priority','attending'])if(key in input&&persisted[key]!==input[key])throw new Error('Leitura pós-gravação divergente: '+key);
+    for(const key of ['comment','questions'])if(key in input&&persisted[key]!==input[key]&&persisted[key]!==safeSheetText(input[key]))throw new Error('Texto não confirmado após gravação: '+key);
     return reply({ok:true,data:persisted});
   }finally{lock.releaseLock();}
  }catch(ex){
