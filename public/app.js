@@ -3,6 +3,7 @@ const $=id=>document.getElementById(id);
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const safeSource=value=>{try{const url=new URL(String(value));return url.protocol==='https:'?url.href:''}catch{return ''}};
 const state={sessions:[],prefs:new Map(),profile:null,view:'list',auth:'loading'};
+const deniedReturn=new URL(window.location.href).searchParams.get('access')==='denied';
 function apiError(code,message){return Object.assign(new Error(message),{code});}
 const requiresLogin=e=>['UNAUTHENTICATED','AUTH_REQUIRED'].includes(e.code);
 const isAccessDenied=e=>e.code==='FORBIDDEN';
@@ -44,13 +45,13 @@ async function save(btn){const container=btn.closest('article'),payload={session
     btn.disabled=false;
   }
 }}
-async function init(){try{const schedule=await api('schedule'),audit=auditSchedule(schedule.sessions||[]);if(audit.errors.length)throw Error(audit.errors.join('; '));state.sessions=schedule.sessions;$('sourceNote').textContent='Fonte oficial · conferida em '+esc(schedule.checkedAt||'data não informada')+' · sujeita a atualização';$('track').innerHTML='<option value="">Todas</option>'+[...new Set(state.sessions.map(x=>x.track))].sort().map(v=>'<option>'+esc(v)+'</option>').join('');render()}catch(e){$('notice').textContent='Agenda indisponível: '+e.message}try{
+async function init(){if(deniedReturn)$('notice').textContent='O Cloudflare Access negou o acesso a esta conta. A programação continua pública.';try{const schedule=await api('schedule'),audit=auditSchedule(schedule.sessions||[]);if(audit.errors.length)throw Error(audit.errors.join('; '));state.sessions=schedule.sessions;$('sourceNote').textContent='Fonte oficial · conferida em '+esc(schedule.checkedAt||'data não informada')+' · sujeita a atualização';$('track').innerHTML='<option value="">Todas</option>'+[...new Set(state.sessions.map(x=>x.track))].sort().map(v=>'<option>'+esc(v)+'</option>').join('');render()}catch(e){$('notice').textContent='Agenda indisponível: '+e.message}try{
     state.profile=await api('me');
     const prefs=await api('preferences');
     state.prefs=new Map(prefs.items.map(p=>[p.sessionId,p]));
     setAuth('authenticated','Perfil autorizado: '+state.profile.label);
   }catch(e){
-    const denied=isAccessDenied(e),needsLogin=requiresLogin(e);
+    const denied=isAccessDenied(e)||deniedReturn,needsLogin=requiresLogin(e);
     setAuth(denied?'denied':needsLogin?'login':'unavailable',denied?'Acesso negado. Sua conta não está autorizada.':needsLogin?'Entre para salvar suas preferências.':'Não foi possível verificar sua sessão: '+e.message);
   }
 }
