@@ -8,7 +8,7 @@ function error(code,message,status) { return reply({ok:false,error:{code:code,me
 // SpreadsheetApp.appendRow/setValues may interpret leading '=' as a formula.
 function safeSheetText(value) {
   const text=String(value??'');
-  return /^[\\s]*[=+@-]/.test(text) ? "'" + text : text;
+  return /^\s*[=+@-]/.test(text) ? "'" + text : text;
 }
 function sheet(ss,name) { const tab=ss.getSheetByName(name); if(!tab)throw new Error('Aba ausente: '+name);return tab; }
 function rows(tab) {
