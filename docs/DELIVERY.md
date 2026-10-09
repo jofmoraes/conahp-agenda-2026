@@ -1,40 +1,38 @@
 # Estado operacional - CONAHP Agenda 2026
 
-Atualizado em: 2026-10-09 (M1 corrigida após CHANGES_REQUESTED; aguardando nova auditoria).
+Atualizado em: **2026-10-09**. **M1: testes locais concluídos, aceite formal pendente na Issue #1. M2: READY_FOR_AUDIT na Issue #2.**
 
-## Estado real
-- Branch `main`: somente documentação inicial, **não alterada** pela Missão 1.
-- Branch `feat/m1-foundation`: fundamento isolado do CONAHP com Worker/HTML/CSS/JS, Apps Script versionado, fixtures e testes; **sem deploy** e **sem conexão a serviços reais**.
-- Commits da M1: `1a838c33a4199868a83940bda04fe7d07c1bdf70` (Worker, modelo de API), `d2003561fa1b7c57f6960d31940b132122fc1526` (frontend, Apps Script, PWA), `b04a07f9f39f2095730cb8986b6b1ad4b32a3d37` (testes).
-- Arquivos-chave: `src/worker.js`, `public/*`, `backend/apps-script/Code.gs`, `data/schedule.synthetic.json`, `tests/worker.test.mjs`, `docs/INTEGRATION.md`, `wrangler.jsonc`.
-- Material RIW examinado somente leitura: árvore, Worker, página principal, partes de app, bridge, service worker, manifest e wrangler. RIW contém backend fixo, ações dependentes de `profile` do navegador e referências a áudio/participantes RIW. O CONAHP usa implementação mínima isolada em vez de copiar esses elementos inseguros.
+## Repositório, branch e segurança
+- Repositório público: `jofmoraes/conahp-agenda-2026`.
+- Branch técnica única: `feat/m1-foundation` (SHA antes do registro final: `28e6a1e2aff15bc535b6adfc1742d83f91422989`; este documento gerará SHA adicional). `main`: `59635a399b686192bb9b9400f2e1d315df5bac4f`, **não alterada**.
+- **Nenhum PR, Code Review, Codex/Work, deploy, GitHub Action, conta externa, Google Sheets real, Cloudflare Access/Worker ativo ou Apps Script publicado.** RIW/GSH intactos. Sem credenciais/URL de Apps Script RIW/dados pessoais no código público.
+- A conexão GitHub por HTTPS no container falhou por DNS. Arquivos foram lidos/versionados pelo conector GitHub; para testes Node reconstruiu-se textualmente os arquivos e conferiram-se hashes SHA-1 de blob Git com as versões da branch (Worker, frontend, utilitários, scripts e testes). Distinguir reconstrução local de `git clone`.
 
-## Arquitetura M1
-- GET `/api/health` e `/api/schedule` públicos; GET `/api/me` e GET/POST `/api/preferences` privados, com erros HTTP explícitos.
-- Access JWT com validação de assinatura RS256 e claims no Worker; Apps Script valida segredo compartilhado e resolve no servidor o perfil autorizado pela identidade transmitida pelo Worker. Nenhuma troca arbitrária de perfil pelo navegador.
-- Planilha futura com abas Profiles, Sessions, Preferences e SourceLog; cabeçalhos e segredo descritos em `docs/INTEGRATION.md`. Não existe planilha CONAHP criada; nenhuma conta real foi alterada.
-- Dados da agenda pública no cache do service worker; preferências e `/api/me` sem cache. Fluxo frontend mínimo para busca, dias, seleção de interesse/prioridade, intenção de assistir, comentários e alerta de conflito de sessões marcadas. O programa oficial e a experiência avançada de grade ficam em M2.
-- `workers_dev=false`, `preview_urls=false`. Nenhum workflow foi criado.
+## M1 - Fundação (Issue #1)
+- Worker JS com JWT Cloudflare Access verificado por RS256/JWKS, `iss`, `aud` como array, `iat`, `exp` e `nbf` quando fornecido; identidade obrigatoriamente verificada no servidor.
+- `GET /api/health` e `/api/schedule` públicos; `/api/me`, `GET/POST /api/preferences` privados e sem cache. `backend/apps-script/Code.gs` versionado, autorização por email associado à aba `Profiles`, segredo partilhado independente e validação de entradas e gravação; nenhum serviço real implantado.
+- Gate pendente da auditoria: **resolvido no nível de testes locais.** Executado em Node.js 22.16.0: `npm test` **11/11 PASS**, `npm run check` **PASS** sobre reconstrução fiel de arquivos versionados; evidência registrada na Issue #1, comentário `6073827475`. A decisão de **fechar a Issue #1** continua exclusiva do orquestrador.
 
-## Evidências de testes e limites
-- **PASS 10/10**: execução do **código real do Worker** obtido do GitHub em runtime JavaScript isolado com primitivas HTTP simuladas e `identity`/`backend` injetados exclusivamente no teste: health/schedule, cache público, autenticação obrigatória, gravação Flora, isolamento Juliana, rejeição de override de perfil, gravação Juliana, preservação Flora, falha de escrita explícita sem persistir, identidade desconhecida negada.
-- **PASS**: verificação de sintaxe por parser JS do Worker (transformação exclusivamente sintática de `export` para avaliar), frontend, service worker, Apps Script e arquivo de testes.
-- **NÃO EXECUTADOS**: `npm test` / `npm run check` em Node real, integração Apps Script/Sheets/Cloudflare, testes móveis e instalação PWA real, na etapa anterior; na auditoria subsequente foi confirmado Node v22, porém checkout GitHub indisponível por DNS, impedindo teste da branch. Os comandos ficam disponíveis no repositório para auditoria local. Não declarar esses testes como PASS.
-- **Não comprovado**: ausência de vínculos Cloudflare Workers Builds ou webhooks externos. A árvore Git não contém `.github/workflows`, mas acesso de leitura às configurações de deploy/webhooks não está disponível pelo conector. Não realizar deploy, merge ou execução de CI antes de verificar os vínculos.
-- **Riscos/gates**: Apps Script público com segredo compartilhado tem risco residual; avaliar a segurança da configuração antes da exposição e configurar segredo independente forte, controle Access, verificação real de identidade e contas separadas. Resposta do Apps Script e gravação em planilha reais ainda sem validação. PWA atual sem ícones de instalação (M2).
-- **Sem credenciais, URLs RIW ou identificadores pessoais inseridos no código novo.** Fixtures são sintéticas e não correspondem à programação real.
+## M2 - Programação e experiência (Issue #2)
+- `public/schedule.json`: **32 registros da grade oficial**, 16 por dia (14-15/10/2026), **109 participações em sessões** (não pessoas únicas), 9 itens sem participantes publicados, com nomes/cargos/instituições informados ou marcados como ausentes. Fonte `https://conahp.org.br/conahp-2026/` conferida em 2026-10-09. `docs/DATA_AUDIT.md` detalha fonte, divergências oficiais e lacunas.
+- IDs definitivos `c26-s001` a `c26-s032`, não derivados do horário, dia ou palco. `sourceHistory` e `verifiedAt` preservados. Futuras revisões da agenda devem atualizar registro **sem trocar ID** nem substituir preferências.
+- Worker serve programação pública via `env.ASSETS` quando disponível, sem exigir Apps Script para consulta. Sheets futuro deve ter aba `Sessions` com os mesmos IDs antes de liberar gravações; exportador CSV local `scripts/export-sessions.mjs` (somente stdout; nenhum acesso a contas externas).
+- Interface estática responsiva `public/app.js`: lista cronológica, grade com régua horária e colunas de simultâneas, seleção de dia, busca por título/participante/instituição/trilha, filtros por trilha, prioridade, intervalo de horário e intenção de assistir. Participantes estruturados e fonte expostos por sessão.
+- Preferências isoladas por identidade autenticada: interesse, prioridade, intenção de assistir, comentários e perguntas; Juliana sem curadoria inicial (`Não analisado` por padrão), novos perfis na planilha privada sem editar frontend. Conflitos só quando **ambas** sessões simultâneas estão marcadas para assistir.
+- PWA com manifest, ícone SVG e service worker que armazena **somente shell público e GET /api/schedule** previamente consultado; não intercepta nem cacheia `/api/me` ou `/api/preferences`. Gravações privadas offline não são prometidas.
+- Commits de referência: `1b3206f` (grade oficial), `183f56f` (participantes), `3aa0071` (IDs estáveis), `a0eb6b5` (Worker com assets), `962eccf` e `1395f0a` (grade), `9f1697a` (filtro horário), `20a64ef` (CSV), `aaa155c` (auditoria). Todos os commits estão na mesma branch; ver histórico Git para os demais.
 
-## Correções da auditoria da Issue #1 (2026-10-09)
-- Auditoria do orquestrador: CHANGES_REQUESTED por `aud` em formato array; a comparação anterior de array com string rejeitava tokens válidos do Cloudflare Access.
-- Commits adicionais: `8635a5c2b0489b756947cc954fd64e90ac9c6f58` (correção de `aud` e `nbf`), `12ce8e1964f6b6636775fa4ffd37fb98a3e0a0c4` (testes reais da função `verifyAccess` com RSA/JWKS sintéticos), `501f45d56ef285b9a3d212d9260ceffd5d8689bc` (contrato atualizado).
-- Comportamento: `aud` deve ser array contendo igualdade exata a `ACCESS_AUD`; rejeitar outros arrays ou valor simples. `nbf` futuro ou de tipo inválido rejeitado, se presente. Assinatura RS256 validada a partir de JWKS da origem Access.
-- Testes criados e versionados: `tests/access-jwt.test.mjs` cobre `verifyAccess` real, audiência, expiração, assinatura inválida, `nbf`, `iss`, `iat`, token ausente. `tests/worker.test.mjs` mantém testes da API com identidades simuladas.
-- **Execução**: Node real v22.16.0 disponível no container; teste direto de WebCrypto RS256 geração/verificação PASS. Tentativa de clonar a branch para esse ambiente retornou `Could not resolve host: github.com`; assim, os comandos `npm test` e `npm run check` **não foram executados com os arquivos da branch** e não devem ser descritos como PASS. O teste criptográfico isolado não substitui a execução da suíte versionada.
-- Sem alterações em `backend/apps-script/Code.gs` por este ajuste: a autorização continua no backend pelo `email` resolvido no Worker; o contrato e campos permitidos de preferências não mudaram. Nenhum ambiente externo configurado.
-- Limitação: Cloudflare real, JWKS remoto, Apps Script/Sheets, instalação PWA e ausência de Workers Builds/webhooks não verificados. **M2 não iniciada.**
+## Evidências e limites dos testes da M2
+- **PASS Node 22.16.0:** `npm test` **22/22**, FAIL 0, após corrigir fixture de horário inconsistente em `ec16824` e adicionar filtro de janela. Testes versionados de JWT real com chaves sintéticas, API, perfis, falha de escrita, contrato Worker/static assets, validação e filtros de agenda, estabilidade de IDs, conflitos, alocação de colunas, isolamento do cache privado em service worker. `npm run check` **PASS** para cinco módulos. Arquivos locais essenciais foram conferidos com hash Git contra os blobs da branch.
+- **PASS Chromium headless com conteúdo local em memória:** **12/12** verificações de busca por instituição, dois dias, lista/grade, salvamento com backend simulado, reentrada de dados no estado, conflitos reais, falha de escrita visível e mobile (390px), sem deploy. A navegação Chromium para servidor localhost foi bloqueada por política do ambiente; teste substituto usa DOM real e execução do código frontend versionado em página em memória, com `fetch` simulado.
+- **PASS auditoria da programação pelo conector GitHub:** 32 entradas, 16+16, IDs únicos, fonte/hora válidas, 109 participações. `npm run schedule:check` e `npm run schedule:csv` foram testados em Node com reconstrução dos **metadados relevantes** dos 32 registros oficiais (não o arquivo JSON completo), confirmando 32, 16+16, 109 e 21 pares sobrepostos, CSV emitido. O `public/schedule.json` original foi auditado diretamente pelo conector, mas não havia transporte binário/rede para copiar seus 38 KB ao container.
+- **NÃO COMPROVADO:** login real Cloudflare Access, identidade em celulares, leitura/gravação real Apps Script/Sheets, modo PWA instalável no aparelho e recarga offline real sob HTTPS, autenticação/segredos em produção e ausência de vínculo externo de auto-deploy. Nenhuma destas validações pode ser declarada como PASS ou aplicativo publicado.
 
-## Próximas missões/gates
-1. Orquestrador audita SHA(s), código e testes da M1 sem PR; Issue #1 permanece OPEN até sua decisão.
-2. Configuração de Cloudflare Access, Apps Script e planilha real isolados somente mediante autorização específica e verificação prévia de automação de deploy. Integração e retestes reais em M3.
-3. M2 implementa agenda oficial validada, interface RIW-equivalente, ícones PWA, UX móvel e funcionalidades restantes, sem importar dados RIW nem preferências antigas.
-4. M4: expositores/pôsteres/compromissos, sujeitos a validação das fontes.
+## Gates e próximas ações
+1. Orquestrador audita a Issue #2, arquivos e testes; Issues permanecem OPEN até sua decisão. Nenhum merge na `main` sem autorização e verificação de gatilhos de publicação.
+2. Gate de integração M3, **somente mediante autorização específica:** provisionar Cloudflare Access/Worker, Apps Script e planilha CONAHP isolados com Profiles/Sessions/Preferences/SourceLog; importar CSV oficial, armazenar segredos fora do repo, testar segurança de escrita e perfis reais, persistência, dispositivos/instalação/offline públicos, e validar riscos do Apps Script público.
+3. Reconfirmar a programação oficial e divergências de nomes antes do congresso; manter IDs/preferências intactos em eventuais atualizações.
+4. M4: exposições/pôsteres/compromissos pessoais como escopo complementar, sem dados inventados.
+
+## Restrições permanentes
+**NO_PR / NO_AUTOMATIC_CODE_REVIEW / NO_CODEX_WITHOUT_EXPLICIT_ACTIVATION.** Sem alteração no RIW ou GSH. Não publicar sem smoke test após deploy aprovado.
