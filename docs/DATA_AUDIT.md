@@ -4,7 +4,7 @@ Fonte primária: https://conahp.org.br/conahp-2026/ (redirecionamento de https:/
 
 ## Contagem e cobertura
 - **32 itens** de programação: **16 em 14/10** e **16 em 15/10**, incluindo pausas, abertura e almoço, tal como publicados na grade consultada.
-- **109 participações** atribuídas a itens (não 109 pessoas distintas). **9 itens** sem nomes de participantes, principalmente atividades gerais e intervalos. Não preencher lacunas por inferência.
+- **110 participações** atribuídas a itens (não 109 pessoas distintas). **9 itens** sem nomes de participantes, principalmente atividades gerais e intervalos. Não preencher lacunas por inferência.
 - Trilhas/palcos da fonte: Plenária; Compromissos setoriais; Tecnologia e inteligência em saúde; Financiamento e sustentabilidade; Pessoas, trabalho e liderança; Legitimidade social e impacto; Intervalo/Área comum. As trilhas do segundo dia diferem das do primeiro.
 - Blocos simultâneos de três sessões por horário; conflitos calculados por intervalos reais, somente quando o perfil marca intenção de assistir.
 - Cada item em `public/schedule.json` tem `id` imutável, `day`, `start`, `end`, `title`, `track`, `stage`, `source`, `verifiedAt`, `participants` e `sourceHistory`. Identidades `c26-s001` a `c26-s032` são atribuídas uma vez e devem permanecer iguais se o programa mudar.
@@ -19,7 +19,13 @@ Fonte primária: https://conahp.org.br/conahp-2026/ (redirecionamento de https:/
 - **Não existe sincronização automática** com a fonte. A importação foi pontual; revisar oficialmente antes do congresso, comparar IDs e anotar alterações sem sobrescrever preferências.
 
 ## Validações e integração
-- Auditoria programática via conector GitHub: 32 entradas, 16 por dia, 32 IDs únicos, 109 participações, fonte e data informadas em todos os registros; nenhum horário inválido identificado na primeira conferência.
+- Auditoria programática via conector GitHub: 32 entradas, 16 por dia, 32 IDs únicos, 110 participações, fonte e data informadas em todos os registros; nenhum horário inválido identificado na primeira conferência.
 - Comando versionado: `node scripts/export-sessions.mjs --check` valida estrutura/contagem; sem `--check`, emite CSV no terminal, **sem criar, ler ou modificar Google Sheets**.
 - Para integração futura autorizada: usar o CSV na aba `Sessions` da planilha CONAHP isolada; os mesmos IDs devem existir antes da primeira gravação real de preferência, pois o Apps Script recusa IDs ausentes. Criar `Profiles` para as identidades autorizadas apenas em ambiente privado, nunca no GitHub público.
 - Testes locais com fixtures não comprovam autenticação Cloudflare Access nem persistência real no Sheets; esses testes pertencem ao gate M3.
+
+## Revalidação oficial da Etapa A M3 - 2026-10-09
+- A página oficial vigente **inclui Zeke Emanuel (apresentador)** no debate de 15/10 às 09:00, **Ética, financiamento da saúde e escolhas difíceis do sistema**. A versão M2 não continha essa participação. Acrescentado ao registro `c26-s018` sem alterar ID, dia, horário ou preferências. Contagem de participações passou **109 -> 110**; inserido `sourceHistory` com nota da revisão.
+- A fonte oficial **continua exibindo Eduarda Jorge** na grade do case Pix e **Eduarda Davidovic** na ficha de palestrante; também mantém **Diogo Dias** na grade e divergência no catálogo. Divergências documentadas, sem reconciliar identidades por inferência.
+- A conferência foi feita em 2026-10-09 a partir da página vigente. Nomes de seções, trilhas e horários foram confrontados por amostra; **não houve reconciliação automática exaustiva item a item**, logo revisão editorial final permanece necessária antes do deploy.
+- O JSON original anterior (`6fa8e62d7de22cb9fbf34ca293fa2f9f1e79991e`, 38.462 bytes) foi auditado integralmente por execução JavaScript do código de validação versionado sobre o conteúdo retornado pelo GitHub: 32 entradas, 16+16, IDs únicos, 21 pares de sobreposição, 109 participações, sem erros estruturais. Não confundir com teste Node sobre a fixture local reconstruída. A atualização mantém 32 sessões com 110 participações.
