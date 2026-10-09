@@ -29,7 +29,7 @@ export async function verifyAccess(request, env) {
   const host=new URL(env.ACCESS_TEAM_DOMAIN);
   if(host.protocol!=='https:'||host.pathname!=='/'||host.search||host.hash)return null;
   const now=Math.floor(Date.now()/1000);
-  if(payload.iss!==host.origin||payload.aud!==env.ACCESS_AUD||!Number.isFinite(payload.exp)||payload.exp<=now||!Number.isFinite(payload.iat)||payload.iat>now+60)return null;
+  if(payload.iss!==host.origin||!Array.isArray(payload.aud)||!payload.aud.includes(env.ACCESS_AUD)||!payload.aud.every(a=>typeof a==='string')||!Number.isFinite(payload.exp)||payload.exp<=now||!Number.isFinite(payload.iat)||payload.iat>now+60||('nbf' in payload&&(!Number.isFinite(payload.nbf)||payload.nbf>now)))return null;
   const keyResponse=await fetch(host.origin+'/cdn-cgi/access/certs',{redirect:'error'});
   if(!keyResponse.ok)throw new Error('Certificados Access indisponíveis');
   const keys=(await keyResponse.json()).keys||[];
