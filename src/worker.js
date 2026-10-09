@@ -67,6 +67,16 @@ async function appsScript(env, action, identity, input) {
 export function createApp({identity=verifyAccess,backend=appsScript}={}) {
   return {async fetch(request,env={}) {
     const url=new URL(request.url);
+    // Entry point protected by the SAME Access application/AUD as the private API.
+    // A top-level navigation lets Access display its interactive login instead of
+    // returning an HTML redirect to fetch() in the public agenda.
+    if(url.pathname==='/auth/login'){
+      if(request.method!=='GET')return fail(405,'METHOD_NOT_ALLOWED','Método não permitido.');
+      let authenticated;
+      try{authenticated=await identity(request,env)}catch{return fail(503,'IDENTITY_UNAVAILABLE','Não foi possível verificar a identidade.');}
+      if(!authenticated?.email)return fail(401,'UNAUTHENTICATED','É necessário entrar pelo Cloudflare Access.');
+      return new Response(null,{status:303,headers:{Location:'/', 'Cache-Control':'no-store','Referrer-Policy':'no-referrer'}});
+    }
     if(!url.pathname.startsWith('/api/'))return env.ASSETS?env.ASSETS.fetch(request):fail(404,'NOT_FOUND','Recurso não encontrado.');
     if(url.pathname==='/api/health'&&request.method==='GET')return success({version:'m1',status:'ready'});
     if(url.pathname==='/api/schedule'&&request.method==='GET') {
