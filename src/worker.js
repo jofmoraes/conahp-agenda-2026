@@ -46,7 +46,8 @@ async function appsScript(env, action, identity, input) {
   // Never forward credentials across a redirect (especially 307/308).
   let endpoint;
   try { endpoint=new URL(env.APPS_SCRIPT_URL); } catch { throw new Error('Backend configurado incorretamente'); }
-  if(endpoint.protocol!=='https:'||endpoint.hostname!=='script.google.com'||!/^\\/macros\\/s\\/[a-zA-Z0-9_-]+\\/exec$/.test(endpoint.pathname)||endpoint.search||endpoint.hash||endpoint.username||endpoint.password)throw new Error('Origem do Apps Script não autorizada');
+  const pathParts=endpoint.pathname.split('/');
+  if(endpoint.protocol!=='https:'||endpoint.hostname!=='script.google.com'||pathParts.length!==5||pathParts[1]!=='macros'||pathParts[2]!=='s'||!/^[a-zA-Z0-9_-]+$/.test(pathParts[3])||pathParts[4]!=='exec'||endpoint.search||endpoint.hash||endpoint.username||endpoint.password)throw new Error('Origem do Apps Script não autorizada');
   let response=await fetch(endpoint.toString(),{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action,email:identity?.email||'',secret:env.APPS_SCRIPT_SECRET,input}),redirect:'manual'});
   if([301,302,303].includes(response.status)){
     const location=response.headers.get('Location');
