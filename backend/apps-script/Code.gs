@@ -5,6 +5,11 @@
 */
 function reply(data) { return ContentService.createTextOutput(JSON.stringify(data)).setMimeType(ContentService.MimeType.JSON); }
 function error(code,message,status) { return reply({ok:false,error:{code:code,message:message},status:status}); }
+// SpreadsheetApp.appendRow/setValues may interpret leading '=' as a formula.
+function safeSheetText(value) {
+  const text=String(value??'');
+  return /^[\\s]*[=+@-]/.test(text) ? "'" + text : text;
+}
 function sheet(ss,name) { const tab=ss.getSheetByName(name); if(!tab)throw new Error('Aba ausente: '+name);return tab; }
 function rows(tab) {
   const v=tab.getDataRange().getValues();if(!v.length)return [];
@@ -63,12 +68,13 @@ function doPost(e) {
     const index=values.findIndex((row,i)=>i>0&&String(row[headers.indexOf('profileId')])===profile.id&&String(row[headers.indexOf('sessionId')])===input.sessionId);
     const previous=index>0?Object.fromEntries(headers.map((h,i)=>[h,values[index][i]])):{};
     const next=Object.assign({},previous,{profileId:profile.id,sessionId:input.sessionId},input,{updatedAt:new Date().toISOString()});
-    const write=headers.map(h=>h==='attending'?String(next[h]===true||next[h]==='true'):String(next[h]??''));
+    const write=headers.map(h=>h==='attending'?String(next[h]===true||next[h]==='true'):['comment','questions'].includes(h)?safeSheetText(next[h]):String(next[h]??''));
     if(index>0)tab.getRange(index+1,1,1,headers.length).setValues([write]);
     else tab.appendRow(write);
     SpreadsheetApp.flush();
     const persisted=preferences(ss,profile.id).find(p=>p.sessionId===input.sessionId);
     if(!persisted)throw new Error('Persistência não confirmada');
+    for(const key of ['interest','priority','attending'])if(key in input&&persisted[key]!==input[key])throw new Error('Leitura pós-gravação divergente: '+key);
     return reply({ok:true,data:persisted});
   }finally{lock.releaseLock();}
  }catch(ex){
