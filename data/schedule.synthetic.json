@@ -1,0 +1,29 @@
+{
+  "updatedAt": "2026-10-09T00:00:00Z",
+  "verified": false,
+  "source": "SYNTHETIC_TEST_ONLY",
+  "sessions": [
+    {
+      "id": "test-session-001",
+      "day": "2026-10-14",
+      "start": "09:00",
+      "end": "10:00",
+      "title": "Sessão fictícia A",
+      "track": "Teste",
+      "stage": "Palco fictício",
+      "source": "SYNTHETIC_TEST_ONLY",
+      "verified": false
+    },
+    {
+      "id": "test-session-002",
+      "day": "2026-10-14",
+      "start": "09:30",
+      "end": "10:30",
+      "title": "Sessão fictícia B",
+      "track": "Teste",
+      "stage": "Palco fictício 2",
+      "source": "SYNTHETIC_TEST_ONLY",
+      "verified": false
+    }
+  ]
+}
