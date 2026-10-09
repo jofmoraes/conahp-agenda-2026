@@ -22,10 +22,19 @@ Estado: **planejamento**, 2026-10-09. **B0 READ-ONLY concluído** (inventário e
 - [ ] Criar inicialmente apenas **perfis sintéticos privados** (nomes/e-mails de teste, nunca subir ao Git público). Depois, sob autorização, cadastrar identidades reais Flora e Juliana, individualmente: e-mail Access validado + perfilId independente; Juliana sem curadoria (`Não analisado`).
 - [ ] Conferir inexistência de dados pessoais no CSV/SourceLog e backup/versionamento da programação. Planilha private, não publicar link.
 
-## B2 - Google Apps Script (aprovação independente)
 
-- [ ] No Google Drive, **Novo > Mais > Google Apps Script** (ou editor da planilha autorizado), criar projeto CONAHP separado, copiar exclusivamente `backend/apps-script/Code.gs` da SHA auditada e registrar versão.
-- [ ] **Configurações do projeto > Propriedades do script**: criar `CONAHP_SPREADSHEET_ID` (ID privado da nova planilha) e `CONAHP_SHARED_SECRET` (segredo forte novo). **Nunca registrar valores** em GitHub/Issue, frontend, screenshot ou log; não usar secrets RIW. Verificar acesso mínimo da conta de implantação à planilha.
+## B2a - Preparação permitida, sem Web App (2026-10-09)
+
+**B1 aprovada pelo orquestrador, B2a autorizada especificamente pelo usuário.** A planilha B1 permanece privada e intacta. O conector Google atual não permite criar projetos Apps Script nem editar Script Properties; portanto o executor não criou projeto, não gerou segredo e não concedeu OAuth. Guia da **única intervenção manual mínima**: [M3_B2A_APPS_SCRIPT_PREPARATION.md](M3_B2A_APPS_SCRIPT_PREPARATION.md).
+
+O escopo B2a **autoriza preparar somente um projeto Apps Script standalone e salvar o código auditado, além das duas propriedades privadas** `CONAHP_SPREADSHEET_ID` (ID somente na interface privada) e `CONAHP_SHARED_SECRET` (segredo forte gerado e guardado em cofre privado, nunca em resposta/chat/log). O projeto deve permanecer **não implantado, não compartilhado e sem execução do Web App**. A ausência de conexão Apps Script é um bloqueio manual, não uma autorização para configurar backend alternativo ou serviço pago.
+
+**B2b** é novo gate, distinto: risco explícito de um Web App acessível publicamente e segredo compartilhado a ser aceito/rejeitado pelo usuário; confirmação de permissões, OAuth, política de acesso, redirect e teste de bloqueio antes de **qualquer** publicação. **B3/B4/B5 não autorizadas.**
+
+## B2b - Publicação Google Apps Script (aprovação independente e posterior)
+
+- [ ] **Somente após confirmação manual de B2a**: conferir projeto Apps Script standalone privado, um único projeto, código `backend/apps-script/Code.gs` na revisão canônica e ausência de deployment; nunca criar outro projeto por engano.
+- [ ] Confirmar somente a **presença** das Script Properties `CONAHP_SPREADSHEET_ID` e `CONAHP_SHARED_SECRET`, em ambiente privado, sem copiar valores para documentação, captura, histórico ou issue. Não usar segredos RIW; verificar propriedade/escopos do projeto e acesso mínimo à planilha antes de implantar.
 - [ ] Revisar o modelo **executar como proprietário** e se o Web App precisará permitir acesso a qualquer pessoa. Se necessário, obter aceite explícito de acesso externo ao endpoint, documentando que uma pessoa com URL consegue chamá-lo mas operações devem responder FORBIDDEN sem segredo; não presumir isolamento por obscuridade da URL.
 - [ ] **Implantar > Nova implantação > App da Web** somente após autorização. Testar POST inválido/inexistente, secret incorreto, perfil não cadastrado, sessão desconhecida, mutação não autorizada e falha de escrita; exigir erro e ausência de efeito. Validar se redirecionamentos ContentService chegam apenas a `script.googleusercontent.com/macros/echo` via GET sem segredo.
 - [ ] Guardar ID/version do deployment e URL privada de destino somente no secret Cloudflare; não colar em repositório público.
