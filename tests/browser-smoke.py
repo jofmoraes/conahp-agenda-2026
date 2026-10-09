@@ -1,5 +1,6 @@
 """Synthetic browser smoke checks. Requires Python playwright + Chromium; no external services or network."""
 import pathlib
+import os
 from playwright.sync_api import sync_playwright
 
 ROOT=pathlib.Path(__file__).resolve().parents[1]/'public'
@@ -36,7 +37,7 @@ def run():
   checks.append((name,bool(value)))
   assert value,name
  with sync_playwright() as p:
-  browser=p.chromium.launch(headless=True,args=['--no-sandbox'])
+  browser=p.chromium.launch(headless=True,executable_path=os.environ.get('CHROMIUM_PATH','/usr/bin/chromium'),args=['--no-sandbox'])
   page=browser.new_page(viewport={'width':1100,'height':800})
   page.set_content(HTML);page.evaluate(INIT,dict(util=UTIL,app=APP,fixture=FIXTURE));page.wait_for_selector('article.session')
   check('3 sessions',page.locator('article.session').count()==3)
