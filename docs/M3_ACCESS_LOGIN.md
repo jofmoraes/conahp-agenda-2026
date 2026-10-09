@@ -9,7 +9,9 @@
 2. `https://<HOST-APROVADO>/api/me` (perfil autenticado);
 3. `https://<HOST-APROVADO>/api/preferences` (GET e POST de preferências).
 
-Todos os destinos usam a **mesma Application Audience Tag (`AUD`)** e a **mesma política Allow**. A API de Cloudflare Access para self-hosted applications possui `destinations` (array de destinos `type: public`, `uri`); confirmar na interface da conta se a configuração com três caminhos exatos é aceita e interceptada antes de publicar. Caso a interface ou plano não permita múltiplos destinos **na mesma aplicação**, **bloquear integração** e obter decisão arquitetural sobre agrupar endpoints privados sob prefixo `/api/private/*` e atualizar contratos/testes. Não criar aplicações diferentes com múltiplos AUDs e depois alargar a validação do Worker de maneira implícita.
+Todos os destinos usam a **mesma Application Audience Tag (`AUD`)** e a **mesma política Allow**.
+
+**Cookie obrigatório na futura configuração real:** deixar **Cookie Path Attribute desabilitado**, para que o cookie `CF_Authorization` não seja limitado ao path `/auth/login` e possa ser enviado também nas requisições aos endpoints privados sob o mesmo hostname. Distinguir o cookie global de sessão no team domain do cookie da aplicação no hostname protegido; conferir Domain, Path, Secure/SameSite, tempo de sessão e comportamento de reautenticação no DevTools. É requisito de B3, **não verificado no painel em B0**. Fonte oficial: https://developers.cloudflare.com/cloudflare-one/access-controls/applications/http-apps/authorization-cookie/ . A API de Cloudflare Access para self-hosted applications possui `destinations` (array de destinos `type: public`, `uri`); confirmar na interface da conta se a configuração com três caminhos exatos é aceita e interceptada antes de publicar. Caso a interface ou plano não permita múltiplos destinos **na mesma aplicação**, **bloquear integração** e obter decisão arquitetural sobre agrupar endpoints privados sob prefixo `/api/private/*` e atualizar contratos/testes. Não criar aplicações diferentes com múltiplos AUDs e depois alargar a validação do Worker de maneira implícita.
 
 **Públicos, fora dos destinos Access:** `/`, `/index.html`, `/app.js`, `/style.css`, `/schedule-utils.js`, `/manifest.webmanifest`, `/icon.svg`, `/service-worker.js`, `/schedule.json` e `GET /api/schedule` (também `GET /api/health`). A regra precisa permitir navegação anônima e cache exclusivamente público.
 
@@ -41,3 +43,7 @@ Todos os destinos usam a **mesma Application Audience Tag (`AUD`)** e a **mesma 
 - https://developers.cloudflare.com/cloudflare-one/access-controls/applications/http-apps/authorization-cookie/application-token/
 
 O comportamento de configurações no Cloudflare Dashboard continua **não verificado sem conta/ambiente autorizado**. A definição não garante antecipadamente que a UI/plano permitam os três destinos, por isso é critério de bloqueio da Etapa B.
+
+## B0 read-only
+
+O preflight GitHub, domínio/Workers, cookie, riscos de Apps Script e gate de B1 estão em `docs/M3_B0_PREFLIGHT.md`. A capacidade de múltiplos destinations com uma AUD é documentada pela Cloudflare; **a conta, aplicação e política reais não foram inspecionadas**. B1-B5 requerem autorização separada.
