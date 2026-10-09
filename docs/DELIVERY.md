@@ -1,11 +1,11 @@
 # Estado operacional - CONAHP Agenda 2026
 
-Atualizado em: **2026-10-09**. **M1/M2 aceitas localmente; M3 Etapa A e B0 aceitas pelo orquestrador. B1 Google Sheets executada sob autorização específica do usuário; B1_READY_FOR_AUDIT, aguardando revisão. B2–B5 NÃO autorizadas.**
+Atualizado em: **2026-10-09**. **M1/M2 aceitas localmente; M3 Etapa A e B0 aceitas; B1 ACCEPTED pelo orquestrador após leitura real da planilha. B2a autorizada para preparar Apps Script sem Web App; revisão de código/esquema concluída, projeto real depende de criação manual (conector sem capacidade Apps Script). B2A_READY_FOR_AUDIT com pendência explícita. B2b/B3/B4/B5 NÃO autorizadas.**
 
 ## Repositório, branch e segurança
 - Repositório público: `jofmoraes/conahp-agenda-2026`.
 - Branch técnica única: `feat/m1-foundation` (consultar HEAD GitHub na Issue #3; histórico auditável). `main`: `59635a399b686192bb9b9400f2e1d315df5bac4f`, **não alterada**.
-- **Nenhum PR, Code Review, Codex/Work, deploy, GitHub Action, conta externa, Google Sheets real, Cloudflare Access/Worker ativo ou Apps Script publicado.** RIW/GSH intactos. Sem credenciais/URL de Apps Script RIW/dados pessoais no código público.
+- **Nenhum PR, Code Review, Codex/Work, deploy, GitHub Action nova, Cloudflare Access/Worker ativo ou Apps Script publicado.** Uma única planilha Google Sheets privada CONAHP foi criada e aprovada em B1; **nenhum projeto Apps Script real foi criado na B2a**. RIW/GSH intactos. Sem credenciais/URL de Apps Script RIW/dados pessoais no código público.
 - A conexão GitHub por HTTPS no container falhou por DNS. Arquivos foram lidos/versionados pelo conector GitHub; para testes Node reconstruiu-se textualmente os arquivos e conferiram-se hashes SHA-1 de blob Git com as versões da branch (Worker, frontend, utilitários, scripts e testes). Distinguir reconstrução local de `git clone`.
 
 ## M1 - Fundação (Issue #1)
@@ -130,3 +130,26 @@ O orquestrador deve reauditar a Etapa A, incluindo o hash do arquivo JSON origin
 - **B4:** Worker/hostname HTTPS, secrets, rota/deploy manual e verificação de Builds/webhooks/CI exigem autorização antes de publicar.
 - **B5:** smoke integrado, mobile/PWA e disponibilização; qualquer merge `main` também necessita autorização independente.
 - Issue #3 permanece OPEN. **B1_READY_FOR_AUDIT não significa READY_FOR_RELEASE ou RELEASED.**
+
+## M3 - B2a Google Apps Script independente (2026-10-09)
+
+**Autorização específica recebida somente para B2a; B2b e B3-B5 não autorizadas.** A auditoria do orquestrador na Issue #3 confirmou **B1 ACCEPTED** após leitura direta da planilha Google Sheets CONAHP. Estado **`B2A_READY_FOR_AUDIT` com dependência manual declarada** (não confundir com projeto configurado ou pronto para publicação).
+
+**Resultado do conector:** as ferramentas Google Drive/Sheets instaladas permitem leitura da planilha, mas a ferramenta `create_file` aceita criar apenas Docs, Sheets e Slides, **não projetos Apps Script**; não há ação instalada para criar `script.google.com` projects, substituir `Code.gs` no editor ou modificar Script Properties. Nenhuma tentativa de usar APIs indevidas, serviços pagos ou acessar script de outro projeto. Consequentemente, **não foi criado projeto real**; `CONAHP_SPREADSHEET_ID` e `CONAHP_SHARED_SECRET` **não foram inseridos**, nenhum segredo forte real foi gerado (não havia destino privado autorizado via ferramenta); sem OAuth, publicação, Web App ou URL `/exec`.
+
+**Código canônico:** `backend/apps-script/Code.gs`, Git blob `be7b23f6c6f1381aca7042b9f0ef772290ccc0ad`; analisado sem modificar. Projeto desejado: **standalone** (não acoplado ao RIW/GSH), com acesso futuro à Sheet B1 somente por `SpreadsheetApp.openById()` e Script Property. Script Properties necessárias: **nomes** `CONAHP_SPREADSHEET_ID` e `CONAHP_SHARED_SECRET`; valores devem permanecer exclusivamente na interface privada e cofre seguro, jamais em repositório público/Issue/resposta.
+
+**Leitura real sem alteração em B1:** a planilha permanece `shared=false`, só `user/owner` entre permissões retornadas. Abas e cabeçalhos exatos correspondem ao código:
+- `Sessions`: 32 registros `c26-s001..c26-s032`; Code.gs usa IDs para validar escrita. Coluna `speakers` adicional é compatível.
+- `Profiles`: 2 perfis fictícios `example.invalid`, `active=false`; Code.gs bloqueia usuários inativos por desenho.
+- `Preferences`: só cabeçalho, sem escolhas.
+- `SourceLog`: 32 registros, IDs alinhados; log editorial não consumido pelo Code.gs.
+**Nenhuma célula ou permissão alterada** na etapa B2a.
+
+**Testes permitidos, 11/11 PASS**: V8 executou o **Code.gs canônico** com `SpreadsheetApp`, `PropertiesService`, `ContentService`, `LockService` inteiramente sintéticos; compilação, proteção por segredo ausente/incorreto, bloqueio dos perfis inativos, leitura de agenda sintética, rejeição de sessão inexistente e de override de perfil, confirmação de gravação somente no mock, campos iniciados por fórmula tratados como texto. **Não houve teste/execução com Apps Script ou Sheets real** nem gravação em dados B1. Não repetidas as suítes M1/M2/M3 já aceitas, por não haver alteração no produto.
+
+**Manual mínimo para concluir criação autorizada:** abrir **script.google.com** na conta proprietária B1, criar **um** Apps Script standalone independente, salvar o `Code.gs` auditado, configurar os nomes das duas propriedades com valor de spreadsheet ID privado e segredo forte novo gerado por cofre/gerador seguro; verificar ausência de implantação e terceiros. Instruções de clique e gates em **[docs/M3_B2A_APPS_SCRIPT_PREPARATION.md](M3_B2A_APPS_SCRIPT_PREPARATION.md)**. Não publicar nem conceder Web App com acesso público. Este procedimento exige intervenção do usuário no editor, pois o conector não oferece essas ações.
+
+**B2b separado:** antes de qualquer publicação Web App, obter **nova autorização e aceite explícito do risco de backend publicamente chamável com segredo compartilhado** (vazamento permitiria forjar e-mail/ler/gravar dados de perfis); revisar escopos, redirect `script.googleusercontent.com`, comportamento HTTP real, testes de bloqueio e rollback. B3 (Cloudflare AUD único), B4 (Worker/HTTPS) e B5 (smokes reais/merge) continuam sem aprovação.
+
+**Governança:** atualização somente em documentos da branch `feat/m1-foundation`, sem PR/Code Review, `main` intacta e sem modificações RIW/GSH. Issue #3 permanece OPEN para auditoria B2a.
