@@ -42,7 +42,18 @@ export async function verifyAccess(request, env) {
 }
 async function appsScript(env, action, identity, input) {
   if(!env.APPS_SCRIPT_URL||!env.APPS_SCRIPT_SECRET)throw new Error('Backend não configurado');
-  const response=await fetch(env.APPS_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action,email:identity?.email||'',secret:env.APPS_SCRIPT_SECRET,input}),redirect:'follow'});
+  // Apps Script ContentService redirects responses to Google's content host.
+  // Never forward credentials across a redirect (especially 307/308).
+  let endpoint;
+  try { endpoint=new URL(env.APPS_SCRIPT_URL); } catch { throw new Error('Backend configurado incorretamente'); }
+  if(endpoint.protocol!=='https:'||endpoint.hostname!=='script.google.com'||!/^\\/macros\\/s\\/[a-zA-Z0-9_-]+\\/exec$/.test(endpoint.pathname)||endpoint.search||endpoint.hash||endpoint.username||endpoint.password)throw new Error('Origem do Apps Script não autorizada');
+  let response=await fetch(endpoint.toString(),{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action,email:identity?.email||'',secret:env.APPS_SCRIPT_SECRET,input}),redirect:'manual'});
+  if([301,302,303].includes(response.status)){
+    const location=response.headers.get('Location');
+    let next;try { next=new URL(location,endpoint); } catch { throw new Error('Redirecionamento do backend inválido'); }
+    if(next.protocol!=='https:'||next.hostname!=='script.googleusercontent.com'||next.pathname!=='/macros/echo'||next.username||next.password)throw new Error('Redirecionamento do backend não autorizado');
+    response=await fetch(next.toString(),{method:'GET',headers:{Accept:'application/json'},redirect:'error'});
+  } else if(response.status>=300&&response.status<400)throw new Error('Redirecionamento do backend não autorizado');
   const text=await response.text();let data;
   try{data=JSON.parse(text)}catch{throw new Error('Backend retornou resposta não JSON')}
   if(!response.ok||!data||data.ok!==true) {
