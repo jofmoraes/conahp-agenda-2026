@@ -15,7 +15,15 @@
       "speakers": "",
       "source": "https://conahp.org.br/conahp-2026/",
       "verified": true,
-      "verifiedAt": "2026-10-09"
+      "verifiedAt": "2026-10-09",
+      "participants": [],
+      "status": "published",
+      "sourceHistory": [
+        {
+          "url": "https://conahp.org.br/conahp-2026/",
+          "verifiedAt": "2026-10-09"
+        }
+      ]
     },
     {
       "id": "conahp26-14-0900-00",
@@ -28,7 +36,66 @@
       "speakers": "Eduardo Amaro; Henrique Neves; Fernando Ganem; Gustavo Fiuza; Henrique Salvador; Júlio Vieira; Rogério Reis; Mohamed Parrini; Fernando Torelly; Antônio Britto (moderação)",
       "source": "https://conahp.org.br/conahp-2026/",
       "verified": true,
-      "verifiedAt": "2026-10-09"
+      "verifiedAt": "2026-10-09",
+      "participants": [
+        {
+          "name": "Eduardo Amaro",
+          "role": "não informado",
+          "institution": "não informada"
+        },
+        {
+          "name": "Henrique Neves",
+          "role": "não informado",
+          "institution": "não informada"
+        },
+        {
+          "name": "Fernando Ganem",
+          "role": "não informado",
+          "institution": "não informada"
+        },
+        {
+          "name": "Gustavo Fiuza",
+          "role": "não informado",
+          "institution": "não informada"
+        },
+        {
+          "name": "Henrique Salvador",
+          "role": "não informado",
+          "institution": "não informada"
+        },
+        {
+          "name": "Júlio Vieira",
+          "role": "não informado",
+          "institution": "não informada"
+        },
+        {
+          "name": "Rogério Reis",
+          "role": "não informado",
+          "institution": "não informada"
+        },
+        {
+          "name": "Mohamed Parrini",
+          "role": "não informado",
+          "institution": "não informada"
+        },
+        {
+          "name": "Fernando Torelly",
+          "role": "não informado",
+          "institution": "não informada"
+        },
+        {
+          "name": "Antônio Britto",
+          "role": "moderação",
+          "institution": "não informada"
+        }
+      ],
+      "status": "published",
+      "sourceHistory": [
+        {
+          "url": "https://conahp.org.br/conahp-2026/",
+          "verifiedAt": "2026-10-09"
+        }
+      ]
     },
     {
       "id": "conahp26-14-1015-06",
@@ -41,7 +108,15 @@
       "speakers": "",
       "source": "https://conahp.org.br/conahp-2026/",
       "verified": true,
-      "verifiedAt": "2026-10-09"
+      "verifiedAt": "2026-10-09",
+      "participants": [],
+      "status": "published",
+      "sourceHistory": [
+        {
+          "url": "https://conahp.org.br/conahp-2026/",
+          "verifiedAt": "2026-10-09"
+        }
+      ]
     },
     {
       "id": "conahp26-14-1100-00",
@@ -54,7 +129,21 @@
       "speakers": "Siva Anandaciva (palestrante) | The King's Fund",
       "source": "https://conahp.org.br/conahp-2026/",
       "verified": true,
-      "verifiedAt": "2026-10-09"
+      "verifiedAt": "2026-10-09",
+      "participants": [
+        {
+          "name": "Siva Anandaciva",
+          "role": "palestrante",
+          "institution": "The King's Fund"
+        }
+      ],
+      "status": "published",
+      "sourceHistory": [
+        {
+          "url": "https://conahp.org.br/conahp-2026/",
+          "verifiedAt": "2026-10-09"
+        }
+      ]
     },
     {
       "id": "conahp26-14-1200-01",
@@ -67,7 +156,36 @@
       "speakers": "Adriano Massuda (debatedor) | Ministério da Saúde; Paulo Chapchap (debatedor) | IEPS; Ana Maria Malik (debatedora) | FGV EAESP; Gabriel Dalla Costa (moderador) | Hospital Glória Dor",
       "source": "https://conahp.org.br/conahp-2026/",
       "verified": true,
-      "verifiedAt": "2026-10-09"
+      "verifiedAt": "2026-10-09",
+      "participants": [
+        {
+          "name": "Adriano Massuda",
+          "role": "debatedor",
+          "institution": "Ministério da Saúde"
+        },
+        {
+          "name": "Paulo Chapchap",
+          "role": "debatedor",
+          "institution": "IEPS"
+        },
+        {
+          "name": "Ana Maria Malik",
+          "role": "debatedora",
+          "institution": "FGV EAESP"
+        },
+        {
+          "name": "Gabriel Dalla Costa",
+          "role": "moderador",
+          "institution": "Hospital Glória Dor"
+        }
+      ],
+      "status": "published",
+      "sourceHistory": [
+        {
+          "url": "https://conahp.org.br/conahp-2026/",
+          "verifiedAt": "2026-10-09"
+        }
+      ]
     },
     {
       "id": "conahp26-14-1200-02",
@@ -80,7 +198,41 @@
       "speakers": "April Saathoff (palestrante) | Johns Hopkins Health System; Felipe Lora (debatedor) | Sabará Hospital Infantil; Lilian Hoffmann (debatedora); Diogo Dias (debatedor) | Hospital Porto Dias; Alex Vieira (moderador) | Hcor",
       "source": "https://conahp.org.br/conahp-2026/",
       "verified": true,
-      "verifiedAt": "2026-10-09"
+      "verifiedAt": "2026-10-09",
+      "participants": [
+        {
+          "name": "April Saathoff",
+          "role": "palestrante",
+          "institution": "Johns Hopkins Health System"
+        },
+        {
+          "name": "Felipe Lora",
+          "role": "debatedor",
+          "institution": "Sabará Hospital Infantil"
+        },
+        {
+          "name": "Lilian Hoffmann",
+          "role": "debatedora",
+          "institution": "não informada"
+        },
+        {
+          "name": "Diogo Dias",
+          "role": "debatedor",
+          "institution": "Hospital Porto Dias"
+        },
+        {
+          "name": "Alex Vieira",
+          "role": "moderador",
+          "institution": "Hcor"
+        }
+      ],
+      "status": "published",
+      "sourceHistory": [
+        {
+          "url": "https://conahp.org.br/conahp-2026/",
+          "verifiedAt": "2026-10-09"
+        }
+      ]
     },
     {
       "id": "conahp26-14-1200-03",
@@ -93,7 +245,41 @@
       "speakers": "Emmanuel Lacerda | SESI; Mauro Junqueira | Conasems; Denizar Vianna | IESS; Ary Ribeiro (moderador) | Elibré; Frederico Magro | Sanofi",
       "source": "https://conahp.org.br/conahp-2026/",
       "verified": true,
-      "verifiedAt": "2026-10-09"
+      "verifiedAt": "2026-10-09",
+      "participants": [
+        {
+          "name": "Emmanuel Lacerda",
+          "role": "não informado",
+          "institution": "SESI"
+        },
+        {
+          "name": "Mauro Junqueira",
+          "role": "não informado",
+          "institution": "Conasems"
+        },
+        {
+          "name": "Denizar Vianna",
+          "role": "não informado",
+          "institution": "IESS"
+        },
+        {
+          "name": "Ary Ribeiro",
+          "role": "moderador",
+          "institution": "Elibré"
+        },
+        {
+          "name": "Frederico Magro",
+          "role": "não informado",
+          "institution": "Sanofi"
+        }
+      ],
+      "status": "published",
+      "sourceHistory": [
+        {
+          "url": "https://conahp.org.br/conahp-2026/",
+          "verifiedAt": "2026-10-09"
+        }
+      ]
     },
     {
       "id": "conahp26-14-1315-06",
@@ -106,7 +292,15 @@
       "speakers": "",
       "source": "https://conahp.org.br/conahp-2026/",
       "verified": true,
-      "verifiedAt": "2026-10-09"
+      "verifiedAt": "2026-10-09",
+      "participants": [],
+      "status": "published",
+      "sourceHistory": [
+        {
+          "url": "https://conahp.org.br/conahp-2026/",
+          "verifiedAt": "2026-10-09"
+        }
+      ]
     },
     {
       "id": "conahp26-14-1430-00",
@@ -119,7 +313,15 @@
       "speakers": "",
       "source": "https://conahp.org.br/conahp-2026/",
       "verified": true,
-      "verifiedAt": "2026-10-09"
+      "verifiedAt": "2026-10-09",
+      "participants": [],
+      "status": "published",
+      "sourceHistory": [
+        {
+          "url": "https://conahp.org.br/conahp-2026/",
+          "verifiedAt": "2026-10-09"
+        }
+      ]
     },
     {
       "id": "conahp26-14-1530-01",
@@ -132,7 +334,41 @@
       "speakers": "Antônio José Pereira | Hospital Sírio-Libanês; Thaís Junqueira | Umane; Mohamed Parrini | Hospital Moinhos de Vento; Denilson de Santa Clara | Rede Santa Catarina; Marco Aurélio (moderador) | Anahp",
       "source": "https://conahp.org.br/conahp-2026/",
       "verified": true,
-      "verifiedAt": "2026-10-09"
+      "verifiedAt": "2026-10-09",
+      "participants": [
+        {
+          "name": "Antônio José Pereira",
+          "role": "não informado",
+          "institution": "Hospital Sírio-Libanês"
+        },
+        {
+          "name": "Thaís Junqueira",
+          "role": "não informado",
+          "institution": "Umane"
+        },
+        {
+          "name": "Mohamed Parrini",
+          "role": "não informado",
+          "institution": "Hospital Moinhos de Vento"
+        },
+        {
+          "name": "Denilson de Santa Clara",
+          "role": "não informado",
+          "institution": "Rede Santa Catarina"
+        },
+        {
+          "name": "Marco Aurélio",
+          "role": "moderador",
+          "institution": "Anahp"
+        }
+      ],
+      "status": "published",
+      "sourceHistory": [
+        {
+          "url": "https://conahp.org.br/conahp-2026/",
+          "verifiedAt": "2026-10-09"
+        }
+      ]
     },
     {
       "id": "conahp26-14-1530-02",
@@ -145,7 +381,36 @@
       "speakers": "Giovanni Cerri | HC-FMUSP; Felipe Cabral (moderador) | Hospital Moinhos de Vento; Paula Xavier | DATASUS; Adriana Ventura | Câmara dos Deputados",
       "source": "https://conahp.org.br/conahp-2026/",
       "verified": true,
-      "verifiedAt": "2026-10-09"
+      "verifiedAt": "2026-10-09",
+      "participants": [
+        {
+          "name": "Giovanni Cerri",
+          "role": "não informado",
+          "institution": "HC-FMUSP"
+        },
+        {
+          "name": "Felipe Cabral",
+          "role": "moderador",
+          "institution": "Hospital Moinhos de Vento"
+        },
+        {
+          "name": "Paula Xavier",
+          "role": "não informado",
+          "institution": "DATASUS"
+        },
+        {
+          "name": "Adriana Ventura",
+          "role": "não informado",
+          "institution": "Câmara dos Deputados"
+        }
+      ],
+      "status": "published",
+      "sourceHistory": [
+        {
+          "url": "https://conahp.org.br/conahp-2026/",
+          "verifiedAt": "2026-10-09"
+        }
+      ]
     },
     {
       "id": "conahp26-14-1530-03",
@@ -158,7 +423,41 @@
       "speakers": "Bruno Sobral | FenaSaúde; José Henrique Salvador | Rede Mater Dei; Mário Jorge Vital | Unidas; Lara Vieira | Pompéia Ecossistema de Saúde; Evandro Moares (moderador) | Hospital São Lucas PUCRS",
       "source": "https://conahp.org.br/conahp-2026/",
       "verified": true,
-      "verifiedAt": "2026-10-09"
+      "verifiedAt": "2026-10-09",
+      "participants": [
+        {
+          "name": "Bruno Sobral",
+          "role": "não informado",
+          "institution": "FenaSaúde"
+        },
+        {
+          "name": "José Henrique Salvador",
+          "role": "não informado",
+          "institution": "Rede Mater Dei"
+        },
+        {
+          "name": "Mário Jorge Vital",
+          "role": "não informado",
+          "institution": "Unidas"
+        },
+        {
+          "name": "Lara Vieira",
+          "role": "não informado",
+          "institution": "Pompéia Ecossistema de Saúde"
+        },
+        {
+          "name": "Evandro Moares",
+          "role": "moderador",
+          "institution": "Hospital São Lucas PUCRS"
+        }
+      ],
+      "status": "published",
+      "sourceHistory": [
+        {
+          "url": "https://conahp.org.br/conahp-2026/",
+          "verifiedAt": "2026-10-09"
+        }
+      ]
     },
     {
       "id": "conahp26-14-1645-06",
@@ -171,7 +470,15 @@
       "speakers": "",
       "source": "https://conahp.org.br/conahp-2026/",
       "verified": true,
-      "verifiedAt": "2026-10-09"
+      "verifiedAt": "2026-10-09",
+      "participants": [],
+      "status": "published",
+      "sourceHistory": [
+        {
+          "url": "https://conahp.org.br/conahp-2026/",
+          "verifiedAt": "2026-10-09"
+        }
+      ]
     },
     {
       "id": "conahp26-14-1730-01",
@@ -184,7 +491,41 @@
       "speakers": "Renato Porto | Interfarma; Marcos Novais | Abramge; Gonzalo Vecina (moderador) | FSP-USP; Wadih Damous | ANS; Antônio Britto | Anahp",
       "source": "https://conahp.org.br/conahp-2026/",
       "verified": true,
-      "verifiedAt": "2026-10-09"
+      "verifiedAt": "2026-10-09",
+      "participants": [
+        {
+          "name": "Renato Porto",
+          "role": "não informado",
+          "institution": "Interfarma"
+        },
+        {
+          "name": "Marcos Novais",
+          "role": "não informado",
+          "institution": "Abramge"
+        },
+        {
+          "name": "Gonzalo Vecina",
+          "role": "moderador",
+          "institution": "FSP-USP"
+        },
+        {
+          "name": "Wadih Damous",
+          "role": "não informado",
+          "institution": "ANS"
+        },
+        {
+          "name": "Antônio Britto",
+          "role": "não informado",
+          "institution": "Anahp"
+        }
+      ],
+      "status": "published",
+      "sourceHistory": [
+        {
+          "url": "https://conahp.org.br/conahp-2026/",
+          "verifiedAt": "2026-10-09"
+        }
+      ]
     },
     {
       "id": "conahp26-14-1730-02",
@@ -197,7 +538,36 @@
       "speakers": "Marco Bego | HC-FMUSP; Edgar Gil | Grupo Fleury; Rubens Barreto | Grupo Santa; Victor Gadelha (moderador) | Dasa",
       "source": "https://conahp.org.br/conahp-2026/",
       "verified": true,
-      "verifiedAt": "2026-10-09"
+      "verifiedAt": "2026-10-09",
+      "participants": [
+        {
+          "name": "Marco Bego",
+          "role": "não informado",
+          "institution": "HC-FMUSP"
+        },
+        {
+          "name": "Edgar Gil",
+          "role": "não informado",
+          "institution": "Grupo Fleury"
+        },
+        {
+          "name": "Rubens Barreto",
+          "role": "não informado",
+          "institution": "Grupo Santa"
+        },
+        {
+          "name": "Victor Gadelha",
+          "role": "moderador",
+          "institution": "Dasa"
+        }
+      ],
+      "status": "published",
+      "sourceHistory": [
+        {
+          "url": "https://conahp.org.br/conahp-2026/",
+          "verifiedAt": "2026-10-09"
+        }
+      ]
     },
     {
       "id": "conahp26-14-1730-03",
@@ -210,7 +580,46 @@
       "speakers": "Daniela Medeiros | Unimed Porto Alegre; César Abicalaffe | IBRAVS; Vanessa Teich | Einstein; Marcia Makdisse (moderadora) | Academia VBHC; Renata Sartório | Danone; Nidia Paulina | Colsanitas",
       "source": "https://conahp.org.br/conahp-2026/",
       "verified": true,
-      "verifiedAt": "2026-10-09"
+      "verifiedAt": "2026-10-09",
+      "participants": [
+        {
+          "name": "Daniela Medeiros",
+          "role": "não informado",
+          "institution": "Unimed Porto Alegre"
+        },
+        {
+          "name": "César Abicalaffe",
+          "role": "não informado",
+          "institution": "IBRAVS"
+        },
+        {
+          "name": "Vanessa Teich",
+          "role": "não informado",
+          "institution": "Einstein"
+        },
+        {
+          "name": "Marcia Makdisse",
+          "role": "moderadora",
+          "institution": "Academia VBHC"
+        },
+        {
+          "name": "Renata Sartório",
+          "role": "não informado",
+          "institution": "Danone"
+        },
+        {
+          "name": "Nidia Paulina",
+          "role": "não informado",
+          "institution": "Colsanitas"
+        }
+      ],
+      "status": "published",
+      "sourceHistory": [
+        {
+          "url": "https://conahp.org.br/conahp-2026/",
+          "verifiedAt": "2026-10-09"
+        }
+      ]
     },
     {
       "id": "conahp26-15-0830-00",
@@ -223,7 +632,15 @@
       "speakers": "",
       "source": "https://conahp.org.br/conahp-2026/",
       "verified": true,
-      "verifiedAt": "2026-10-09"
+      "verifiedAt": "2026-10-09",
+      "participants": [],
+      "status": "published",
+      "sourceHistory": [
+        {
+          "url": "https://conahp.org.br/conahp-2026/",
+          "verifiedAt": "2026-10-09"
+        }
+      ]
     },
     {
       "id": "conahp26-15-0900-01",
@@ -236,7 +653,36 @@
       "speakers": "Arthur Aguillar | IEPS; Nelson Teich; Francisco Balestrin (moderador) | Sindhosp; Fernanda de Negri | Ministério da Saúde",
       "source": "https://conahp.org.br/conahp-2026/",
       "verified": true,
-      "verifiedAt": "2026-10-09"
+      "verifiedAt": "2026-10-09",
+      "participants": [
+        {
+          "name": "Arthur Aguillar",
+          "role": "não informado",
+          "institution": "IEPS"
+        },
+        {
+          "name": "Nelson Teich",
+          "role": "não informado",
+          "institution": "não informada"
+        },
+        {
+          "name": "Francisco Balestrin",
+          "role": "moderador",
+          "institution": "Sindhosp"
+        },
+        {
+          "name": "Fernanda de Negri",
+          "role": "não informado",
+          "institution": "Ministério da Saúde"
+        }
+      ],
+      "status": "published",
+      "sourceHistory": [
+        {
+          "url": "https://conahp.org.br/conahp-2026/",
+          "verifiedAt": "2026-10-09"
+        }
+      ]
     },
     {
       "id": "conahp26-15-0900-04",
@@ -249,7 +695,41 @@
       "speakers": "Michelle Schneider (apresentadora); Haline Aquino | GPTW; Helidea Lima | Rede D'Or; Vânia Rohsig | Hospital Moinhos de Vento; Fábio Patrus (moderador) | Hospital da Baleia",
       "source": "https://conahp.org.br/conahp-2026/",
       "verified": true,
-      "verifiedAt": "2026-10-09"
+      "verifiedAt": "2026-10-09",
+      "participants": [
+        {
+          "name": "Michelle Schneider",
+          "role": "apresentadora",
+          "institution": "não informada"
+        },
+        {
+          "name": "Haline Aquino",
+          "role": "não informado",
+          "institution": "GPTW"
+        },
+        {
+          "name": "Helidea Lima",
+          "role": "não informado",
+          "institution": "Rede D'Or"
+        },
+        {
+          "name": "Vânia Rohsig",
+          "role": "não informado",
+          "institution": "Hospital Moinhos de Vento"
+        },
+        {
+          "name": "Fábio Patrus",
+          "role": "moderador",
+          "institution": "Hospital da Baleia"
+        }
+      ],
+      "status": "published",
+      "sourceHistory": [
+        {
+          "url": "https://conahp.org.br/conahp-2026/",
+          "verifiedAt": "2026-10-09"
+        }
+      ]
     },
     {
       "id": "conahp26-15-0900-05",
@@ -262,7 +742,36 @@
       "speakers": "Ann Somers Hogg | Clayton Christensen Institute; Claudio Lottenberg | Einstein; Romeu Domingues | Dasa; Daniel Greca (moderador) | Hospital Sírio-Libanês",
       "source": "https://conahp.org.br/conahp-2026/",
       "verified": true,
-      "verifiedAt": "2026-10-09"
+      "verifiedAt": "2026-10-09",
+      "participants": [
+        {
+          "name": "Ann Somers Hogg",
+          "role": "não informado",
+          "institution": "Clayton Christensen Institute"
+        },
+        {
+          "name": "Claudio Lottenberg",
+          "role": "não informado",
+          "institution": "Einstein"
+        },
+        {
+          "name": "Romeu Domingues",
+          "role": "não informado",
+          "institution": "Dasa"
+        },
+        {
+          "name": "Daniel Greca",
+          "role": "moderador",
+          "institution": "Hospital Sírio-Libanês"
+        }
+      ],
+      "status": "published",
+      "sourceHistory": [
+        {
+          "url": "https://conahp.org.br/conahp-2026/",
+          "verifiedAt": "2026-10-09"
+        }
+      ]
     },
     {
       "id": "conahp26-15-1015-06",
@@ -275,7 +784,15 @@
       "speakers": "",
       "source": "https://conahp.org.br/conahp-2026/",
       "verified": true,
-      "verifiedAt": "2026-10-09"
+      "verifiedAt": "2026-10-09",
+      "participants": [],
+      "status": "published",
+      "sourceHistory": [
+        {
+          "url": "https://conahp.org.br/conahp-2026/",
+          "verifiedAt": "2026-10-09"
+        }
+      ]
     },
     {
       "id": "conahp26-15-1100-01",
@@ -288,7 +805,36 @@
       "speakers": "Eduardo Spinussi | Fundação Zerrener; Dominic Lourenço | ANS; Victor Piana (moderador) | A.C.Camargo; Renata Salvador | Rede Mater Dei",
       "source": "https://conahp.org.br/conahp-2026/",
       "verified": true,
-      "verifiedAt": "2026-10-09"
+      "verifiedAt": "2026-10-09",
+      "participants": [
+        {
+          "name": "Eduardo Spinussi",
+          "role": "não informado",
+          "institution": "Fundação Zerrener"
+        },
+        {
+          "name": "Dominic Lourenço",
+          "role": "não informado",
+          "institution": "ANS"
+        },
+        {
+          "name": "Victor Piana",
+          "role": "moderador",
+          "institution": "A.C.Camargo"
+        },
+        {
+          "name": "Renata Salvador",
+          "role": "não informado",
+          "institution": "Rede Mater Dei"
+        }
+      ],
+      "status": "published",
+      "sourceHistory": [
+        {
+          "url": "https://conahp.org.br/conahp-2026/",
+          "verifiedAt": "2026-10-09"
+        }
+      ]
     },
     {
       "id": "conahp26-15-1100-04",
@@ -301,7 +847,36 @@
       "speakers": "André Fusco; Cláudio Queiroz; Maria Souza | Grupo Cruzeiro do Sul; Lorena Morelato (moderadora) | Kora Saúde",
       "source": "https://conahp.org.br/conahp-2026/",
       "verified": true,
-      "verifiedAt": "2026-10-09"
+      "verifiedAt": "2026-10-09",
+      "participants": [
+        {
+          "name": "André Fusco",
+          "role": "não informado",
+          "institution": "não informada"
+        },
+        {
+          "name": "Cláudio Queiroz",
+          "role": "não informado",
+          "institution": "não informada"
+        },
+        {
+          "name": "Maria Souza",
+          "role": "não informado",
+          "institution": "Grupo Cruzeiro do Sul"
+        },
+        {
+          "name": "Lorena Morelato",
+          "role": "moderadora",
+          "institution": "Kora Saúde"
+        }
+      ],
+      "status": "published",
+      "sourceHistory": [
+        {
+          "url": "https://conahp.org.br/conahp-2026/",
+          "verifiedAt": "2026-10-09"
+        }
+      ]
     },
     {
       "id": "conahp26-15-1100-05",
@@ -314,7 +889,36 @@
       "speakers": "Alexandre Kalache | Age-Friendly Institute; Martha Oliveira | Laços Saúde; Charles London | Hospital São Vicente; Laura Schiesari (moderadora) | FGV EAESP",
       "source": "https://conahp.org.br/conahp-2026/",
       "verified": true,
-      "verifiedAt": "2026-10-09"
+      "verifiedAt": "2026-10-09",
+      "participants": [
+        {
+          "name": "Alexandre Kalache",
+          "role": "não informado",
+          "institution": "Age-Friendly Institute"
+        },
+        {
+          "name": "Martha Oliveira",
+          "role": "não informado",
+          "institution": "Laços Saúde"
+        },
+        {
+          "name": "Charles London",
+          "role": "não informado",
+          "institution": "Hospital São Vicente"
+        },
+        {
+          "name": "Laura Schiesari",
+          "role": "moderadora",
+          "institution": "FGV EAESP"
+        }
+      ],
+      "status": "published",
+      "sourceHistory": [
+        {
+          "url": "https://conahp.org.br/conahp-2026/",
+          "verifiedAt": "2026-10-09"
+        }
+      ]
     },
     {
       "id": "conahp26-15-1215-06",
@@ -327,7 +931,15 @@
       "speakers": "",
       "source": "https://conahp.org.br/conahp-2026/",
       "verified": true,
-      "verifiedAt": "2026-10-09"
+      "verifiedAt": "2026-10-09",
+      "participants": [],
+      "status": "published",
+      "sourceHistory": [
+        {
+          "url": "https://conahp.org.br/conahp-2026/",
+          "verifiedAt": "2026-10-09"
+        }
+      ]
     },
     {
       "id": "conahp26-15-1330-01",
@@ -340,7 +952,41 @@
       "speakers": "Renato Casarotti | Grupo AMI; Jacson Barros | AWS; Vitor Ferreira | ABCIS; José Marcelo (moderador) | Hospital Alemão Oswaldo Cruz; Eduarda Jorge | Febraban",
       "source": "https://conahp.org.br/conahp-2026/",
       "verified": true,
-      "verifiedAt": "2026-10-09"
+      "verifiedAt": "2026-10-09",
+      "participants": [
+        {
+          "name": "Renato Casarotti",
+          "role": "não informado",
+          "institution": "Grupo AMI"
+        },
+        {
+          "name": "Jacson Barros",
+          "role": "não informado",
+          "institution": "AWS"
+        },
+        {
+          "name": "Vitor Ferreira",
+          "role": "não informado",
+          "institution": "ABCIS"
+        },
+        {
+          "name": "José Marcelo",
+          "role": "moderador",
+          "institution": "Hospital Alemão Oswaldo Cruz"
+        },
+        {
+          "name": "Eduarda Jorge",
+          "role": "não informado",
+          "institution": "Febraban"
+        }
+      ],
+      "status": "published",
+      "sourceHistory": [
+        {
+          "url": "https://conahp.org.br/conahp-2026/",
+          "verifiedAt": "2026-10-09"
+        }
+      ]
     },
     {
       "id": "conahp26-15-1330-04",
@@ -353,7 +999,46 @@
       "speakers": "Mário Scheffer | FMUSP; Felipe Proenço | Ministério da Saúde; Alexandre Holthausen | Einstein; Alexandre Kalache | Age-Friendly Institute; Nadine Clausell | UFRGS; Alexandre Biasi (moderador) | Hcor",
       "source": "https://conahp.org.br/conahp-2026/",
       "verified": true,
-      "verifiedAt": "2026-10-09"
+      "verifiedAt": "2026-10-09",
+      "participants": [
+        {
+          "name": "Mário Scheffer",
+          "role": "não informado",
+          "institution": "FMUSP"
+        },
+        {
+          "name": "Felipe Proenço",
+          "role": "não informado",
+          "institution": "Ministério da Saúde"
+        },
+        {
+          "name": "Alexandre Holthausen",
+          "role": "não informado",
+          "institution": "Einstein"
+        },
+        {
+          "name": "Alexandre Kalache",
+          "role": "não informado",
+          "institution": "Age-Friendly Institute"
+        },
+        {
+          "name": "Nadine Clausell",
+          "role": "não informado",
+          "institution": "UFRGS"
+        },
+        {
+          "name": "Alexandre Biasi",
+          "role": "moderador",
+          "institution": "Hcor"
+        }
+      ],
+      "status": "published",
+      "sourceHistory": [
+        {
+          "url": "https://conahp.org.br/conahp-2026/",
+          "verifiedAt": "2026-10-09"
+        }
+      ]
     },
     {
       "id": "conahp26-15-1330-05",
@@ -366,7 +1051,46 @@
       "speakers": "Daiana Garbin; Luciana Holtz | Instituto Oncoguia; Marlene Oliveira | Instituto Lado a Lado pela Vida; Hilton Melo | MPF; Natália Cuminal (moderadora) | Futuro da Saúde; Isabel Opice | ImpulsoGov",
       "source": "https://conahp.org.br/conahp-2026/",
       "verified": true,
-      "verifiedAt": "2026-10-09"
+      "verifiedAt": "2026-10-09",
+      "participants": [
+        {
+          "name": "Daiana Garbin",
+          "role": "não informado",
+          "institution": "não informada"
+        },
+        {
+          "name": "Luciana Holtz",
+          "role": "não informado",
+          "institution": "Instituto Oncoguia"
+        },
+        {
+          "name": "Marlene Oliveira",
+          "role": "não informado",
+          "institution": "Instituto Lado a Lado pela Vida"
+        },
+        {
+          "name": "Hilton Melo",
+          "role": "não informado",
+          "institution": "MPF"
+        },
+        {
+          "name": "Natália Cuminal",
+          "role": "moderadora",
+          "institution": "Futuro da Saúde"
+        },
+        {
+          "name": "Isabel Opice",
+          "role": "não informado",
+          "institution": "ImpulsoGov"
+        }
+      ],
+      "status": "published",
+      "sourceHistory": [
+        {
+          "url": "https://conahp.org.br/conahp-2026/",
+          "verifiedAt": "2026-10-09"
+        }
+      ]
     },
     {
       "id": "conahp26-15-1445-06",
@@ -379,7 +1103,15 @@
       "speakers": "",
       "source": "https://conahp.org.br/conahp-2026/",
       "verified": true,
-      "verifiedAt": "2026-10-09"
+      "verifiedAt": "2026-10-09",
+      "participants": [],
+      "status": "published",
+      "sourceHistory": [
+        {
+          "url": "https://conahp.org.br/conahp-2026/",
+          "verifiedAt": "2026-10-09"
+        }
+      ]
     },
     {
       "id": "conahp26-15-1530-01",
@@ -392,7 +1124,41 @@
       "speakers": "Massanori Shibata Jr | Dr. Consulta; Eugênio Vilaça | Conass; Cesar Franco (moderador); Rafael Ielpo | A.C.Camargo; Matheus Moraes | Alice",
       "source": "https://conahp.org.br/conahp-2026/",
       "verified": true,
-      "verifiedAt": "2026-10-09"
+      "verifiedAt": "2026-10-09",
+      "participants": [
+        {
+          "name": "Massanori Shibata Jr",
+          "role": "não informado",
+          "institution": "Dr. Consulta"
+        },
+        {
+          "name": "Eugênio Vilaça",
+          "role": "não informado",
+          "institution": "Conass"
+        },
+        {
+          "name": "Cesar Franco",
+          "role": "moderador",
+          "institution": "não informada"
+        },
+        {
+          "name": "Rafael Ielpo",
+          "role": "não informado",
+          "institution": "A.C.Camargo"
+        },
+        {
+          "name": "Matheus Moraes",
+          "role": "não informado",
+          "institution": "Alice"
+        }
+      ],
+      "status": "published",
+      "sourceHistory": [
+        {
+          "url": "https://conahp.org.br/conahp-2026/",
+          "verifiedAt": "2026-10-09"
+        }
+      ]
     },
     {
       "id": "conahp26-15-1530-04",
@@ -405,7 +1171,36 @@
       "speakers": "Marcos Cunha | Associação Voluntários da Saúde; Rodrigo Ladeira | Athena Saúde; Leandro Ortigoza (moderador) | Real Hospital Português; Fernando Torelly | Rede D'Or",
       "source": "https://conahp.org.br/conahp-2026/",
       "verified": true,
-      "verifiedAt": "2026-10-09"
+      "verifiedAt": "2026-10-09",
+      "participants": [
+        {
+          "name": "Marcos Cunha",
+          "role": "não informado",
+          "institution": "Associação Voluntários da Saúde"
+        },
+        {
+          "name": "Rodrigo Ladeira",
+          "role": "não informado",
+          "institution": "Athena Saúde"
+        },
+        {
+          "name": "Leandro Ortigoza",
+          "role": "moderador",
+          "institution": "Real Hospital Português"
+        },
+        {
+          "name": "Fernando Torelly",
+          "role": "não informado",
+          "institution": "Rede D'Or"
+        }
+      ],
+      "status": "published",
+      "sourceHistory": [
+        {
+          "url": "https://conahp.org.br/conahp-2026/",
+          "verifiedAt": "2026-10-09"
+        }
+      ]
     },
     {
       "id": "conahp26-15-1530-05",
@@ -418,7 +1213,36 @@
       "speakers": "Sidney Klajner | Einstein; Carlos Nobre | USP; Joslene Rodrigues (moderadora) | Hcor; Rodrigo Favetta | Pacto Global – Rede Brasil",
       "source": "https://conahp.org.br/conahp-2026/",
       "verified": true,
-      "verifiedAt": "2026-10-09"
+      "verifiedAt": "2026-10-09",
+      "participants": [
+        {
+          "name": "Sidney Klajner",
+          "role": "não informado",
+          "institution": "Einstein"
+        },
+        {
+          "name": "Carlos Nobre",
+          "role": "não informado",
+          "institution": "USP"
+        },
+        {
+          "name": "Joslene Rodrigues",
+          "role": "moderadora",
+          "institution": "Hcor"
+        },
+        {
+          "name": "Rodrigo Favetta",
+          "role": "não informado",
+          "institution": "Pacto Global – Rede Brasil"
+        }
+      ],
+      "status": "published",
+      "sourceHistory": [
+        {
+          "url": "https://conahp.org.br/conahp-2026/",
+          "verifiedAt": "2026-10-09"
+        }
+      ]
     }
   ]
 }
