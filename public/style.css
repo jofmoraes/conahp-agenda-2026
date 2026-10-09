@@ -3,3 +3,5 @@
 #sessions.view-grid section{overflow-x:auto;max-width:100%}#sessions.view-grid .grid-day{min-width:540px}.save-state{font-weight:700;color:#205d3b}
 
 .grid-events{position:absolute;top:0;bottom:0;left:52px;right:0}.time-axis{position:absolute;top:0;bottom:0;left:0;width:50px;background:#eef4f6;border-right:1px solid #d4e0e6}.time-axis span{position:absolute;left:5px;font-size:11px;color:#456477;white-space:nowrap;transform:translateY(-2px)}
+
+#loginButton{display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border:2px solid #d3f0ed;border-radius:8px;background:white;color:#243d51;font-weight:700;cursor:pointer;min-height:44px}#loginButton[hidden]{display:none}#loginButton:focus-visible{outline:3px solid #67d2d0;outline-offset:3px}
