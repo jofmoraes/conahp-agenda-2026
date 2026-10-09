@@ -1,6 +1,6 @@
 # Estado operacional - CONAHP Agenda 2026
 
-Atualizado em: 2026-10-09 (M1 implementada em branch, aguardando auditoria).
+Atualizado em: 2026-10-09 (M1 corrigida após CHANGES_REQUESTED; aguardando nova auditoria).
 
 ## Estado real
 - Branch `main`: somente documentação inicial, **não alterada** pela Missão 1.
@@ -19,10 +19,19 @@ Atualizado em: 2026-10-09 (M1 implementada em branch, aguardando auditoria).
 ## Evidências de testes e limites
 - **PASS 10/10**: execução do **código real do Worker** obtido do GitHub em runtime JavaScript isolado com primitivas HTTP simuladas e `identity`/`backend` injetados exclusivamente no teste: health/schedule, cache público, autenticação obrigatória, gravação Flora, isolamento Juliana, rejeição de override de perfil, gravação Juliana, preservação Flora, falha de escrita explícita sem persistir, identidade desconhecida negada.
 - **PASS**: verificação de sintaxe por parser JS do Worker (transformação exclusivamente sintática de `export` para avaliar), frontend, service worker, Apps Script e arquivo de testes.
-- **NÃO EXECUTADOS**: `npm test` / `npm run check` em Node real, integração Apps Script/Sheets/Cloudflare, testes móveis e instalação PWA real, pois o ambiente executor não dispõe de Node associado à branch ou serviços externos autorizados. Os comandos ficam disponíveis no repositório para auditoria local. Não declarar esses testes como PASS.
+- **NÃO EXECUTADOS**: `npm test` / `npm run check` em Node real, integração Apps Script/Sheets/Cloudflare, testes móveis e instalação PWA real, na etapa anterior; na auditoria subsequente foi confirmado Node v22, porém checkout GitHub indisponível por DNS, impedindo teste da branch. Os comandos ficam disponíveis no repositório para auditoria local. Não declarar esses testes como PASS.
 - **Não comprovado**: ausência de vínculos Cloudflare Workers Builds ou webhooks externos. A árvore Git não contém `.github/workflows`, mas acesso de leitura às configurações de deploy/webhooks não está disponível pelo conector. Não realizar deploy, merge ou execução de CI antes de verificar os vínculos.
 - **Riscos/gates**: Apps Script público com segredo compartilhado tem risco residual; avaliar a segurança da configuração antes da exposição e configurar segredo independente forte, controle Access, verificação real de identidade e contas separadas. Resposta do Apps Script e gravação em planilha reais ainda sem validação. PWA atual sem ícones de instalação (M2).
 - **Sem credenciais, URLs RIW ou identificadores pessoais inseridos no código novo.** Fixtures são sintéticas e não correspondem à programação real.
+
+## Correções da auditoria da Issue #1 (2026-10-09)
+- Auditoria do orquestrador: CHANGES_REQUESTED por `aud` em formato array; a comparação anterior de array com string rejeitava tokens válidos do Cloudflare Access.
+- Commits adicionais: `8635a5c2b0489b756947cc954fd64e90ac9c6f58` (correção de `aud` e `nbf`), `12ce8e1964f6b6636775fa4ffd37fb98a3e0a0c4` (testes reais da função `verifyAccess` com RSA/JWKS sintéticos), `501f45d56ef285b9a3d212d9260ceffd5d8689bc` (contrato atualizado).
+- Comportamento: `aud` deve ser array contendo igualdade exata a `ACCESS_AUD`; rejeitar outros arrays ou valor simples. `nbf` futuro ou de tipo inválido rejeitado, se presente. Assinatura RS256 validada a partir de JWKS da origem Access.
+- Testes criados e versionados: `tests/access-jwt.test.mjs` cobre `verifyAccess` real, audiência, expiração, assinatura inválida, `nbf`, `iss`, `iat`, token ausente. `tests/worker.test.mjs` mantém testes da API com identidades simuladas.
+- **Execução**: Node real v22.16.0 disponível no container; teste direto de WebCrypto RS256 geração/verificação PASS. Tentativa de clonar a branch para esse ambiente retornou `Could not resolve host: github.com`; assim, os comandos `npm test` e `npm run check` **não foram executados com os arquivos da branch** e não devem ser descritos como PASS. O teste criptográfico isolado não substitui a execução da suíte versionada.
+- Sem alterações em `backend/apps-script/Code.gs` por este ajuste: a autorização continua no backend pelo `email` resolvido no Worker; o contrato e campos permitidos de preferências não mudaram. Nenhum ambiente externo configurado.
+- Limitação: Cloudflare real, JWKS remoto, Apps Script/Sheets, instalação PWA e ausência de Workers Builds/webhooks não verificados. **M2 não iniciada.**
 
 ## Próximas missões/gates
 1. Orquestrador audita SHA(s), código e testes da M1 sem PR; Issue #1 permanece OPEN até sua decisão.
