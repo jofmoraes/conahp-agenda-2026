@@ -1,1 +1,14 @@
-{"name":"conahp-agenda-2026","private":true,"type":"module","scripts":{"test":"node --test tests/*.test.mjs","check":"node --check src/worker.js && node --check public/app.js"},"devDependencies":{"wrangler":"^4.24.4"}}
+{
+  "name": "conahp-agenda-2026",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "check": "node --check src/worker.js && node --check public/app.js && node --check public/schedule-utils.js && node --check public/service-worker.js && node --check scripts/export-sessions.mjs",
+    "schedule:check": "node scripts/export-sessions.mjs --check",
+    "schedule:csv": "node scripts/export-sessions.mjs"
+  },
+  "devDependencies": {
+    "wrangler": "^4.24.4"
+  }
+}
