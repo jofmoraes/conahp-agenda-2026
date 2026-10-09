@@ -11,7 +11,7 @@ function harness(){
 }
 test('service worker never intercepts or caches private API requests',async()=>{
  const {handlers,writes}=harness();let intercepted=false;
- for(const path of ['/api/me','/api/preferences']){
+ for(const path of ['/api/me','/api/preferences','/auth/login']){
   handlers.fetch({request:new Request('https://example.invalid'+path),respondWith:()=>intercepted=true});
  }
  assert.equal(intercepted,false);assert.deepEqual(writes,[]);
@@ -20,7 +20,7 @@ test('service worker only caches public schedule and public application shell',a
  const {handlers,writes}=harness();let reply;
  handlers.install({waitUntil:p=>reply=p});await reply;
  assert.ok(writes.includes('/app.js'));assert.ok(writes.includes('/schedule-utils.js'));assert.ok(writes.includes('/icon.svg'));
- assert.equal(writes.some(x=>x.includes('/api/me')||x.includes('/api/preferences')),false);
+ assert.equal(writes.some(x=>x.includes('/api/me')||x.includes('/api/preferences')||x.includes('/auth/login')),false);
  handlers.fetch({request:new Request('https://example.invalid/api/schedule'),respondWith:p=>reply=p});
  assert.equal((await reply).status,200);await Promise.resolve();await Promise.resolve();
  assert.ok(writes.includes('/api/schedule'));
