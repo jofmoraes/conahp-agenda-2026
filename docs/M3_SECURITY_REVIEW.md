@@ -29,6 +29,8 @@
 - Node.js 22.16.0 `npm test`: **26/26 PASS** (JWT, API, perfis, filtros, colisões, SW, e 4 novos cenários de redirecionamento).
 - `npm run check`: **PASS** para Worker, app, utilitários, SW e exportador.
 - `python tests/browser-smoke.py`: **13/13 PASS**, Chromium headless em DOM local, backend fictício e tela móvel.
-- `Code.gs` original (blob `c15d1c888ce9a67dcfc254074ebdaac4e101ccb4`) avaliado com 8 cenários em runtime JavaScript com Google Sheets simulado: **8/8 PASS**.
+- `Code.gs` da revisão inicial (blob `c15d1c888ce9a67dcfc254074ebdaac4e101ccb4`) avaliado com 8 cenários em runtime JavaScript com Google Sheets simulado: **8/8 PASS**.
 - `public/schedule.json` original anterior, SHA blob `6fa8e62...`, **38.462 bytes**, auditado integralmente: 32, 16+16, 109 participações e 21 pares, sem erros estruturais. Nova versão com Zeke Emanuel, SHA blob `9ab9fb499255d52d03a57d0130af8d25d6f61b6e`, **38.921 bytes**, 110 participações, 32 IDs, 21 pares, zero erro; CSV avaliado com 33 linhas, **10.456 bytes** em JavaScript do conector.
 - Fontes de método: https://developers.cloudflare.com/cloudflare-one/access-controls/applications/http-apps/authorization-cookie/validating-json/ ; https://developers.google.com/apps-script/reference/spreadsheet/sheet ; https://conahp.org.br/conahp-2026/
+
+Atualização de segurança: commit `b4d0df8` agora confere também igualdade da leitura de `comment` e `questions` após a gravação, aceitando representação textual escapada com apóstrofo. Nova verificação sintética do arquivo integral SHA `be7b23f6c6f1381aca7042b9f0ef772290ccc0ad` confirmou sucesso, isolamento entre perfis e tratamento seguro de comentários iniciados por fórmula; Google Sheets real permanece gate externo.
