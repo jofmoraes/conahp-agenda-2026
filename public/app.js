@@ -49,6 +49,7 @@ async function init(){if(deniedReturn)$('notice').textContent='O Cloudflare Acce
     state.profile=await api('me');
     const prefs=await api('preferences');
     state.prefs=new Map(prefs.items.map(p=>[p.sessionId,p]));
+    if(deniedReturn)$('notice').textContent='';
     setAuth('authenticated','Perfil autorizado: '+state.profile.label);
   }catch(e){
     const denied=isAccessDenied(e)||deniedReturn,needsLogin=requiresLogin(e);
