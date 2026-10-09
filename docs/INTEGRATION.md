@@ -1,7 +1,7 @@
 # Contrato M1 e integração pendente
 
 ## Identidade e autorização
-O Worker verifica assinatura RS256 do JWT `Cf-Access-Jwt-Assertion` contra as chaves de `https://<team-domain>/cdn-cgi/access/certs`, além de `iss`, `aud`, `exp`, `iat`. **Não basta selecionar nome no navegador.** Usar políticas Cloudflare Access com identidades permitidas; configurar secrets `ACCESS_AUD`, `ACCESS_TEAM_DOMAIN`, `APPS_SCRIPT_URL`, `APPS_SCRIPT_SECRET` no ambiente autorizado. Nunca os incluir no Git. O backend Apps Script valida segredo em toda ação, resolve email autenticado em Profiles e ignora perfis do navegador. A URL pública do Apps Script pode ser chamada, mas não deve autorizar acesso sem segredo. O segredo não deve aparecer em logs ou dados da planilha. O endpoint de certificados exige acesso externo; não foi testado com conta real.
+O Worker verifica assinatura RS256 do JWT `Cf-Access-Jwt-Assertion` contra as chaves de `https://<team-domain>/cdn-cgi/access/certs`, além de `iss`, `aud`, `exp`, `iat` e `nbf` (quando presente). `aud` deve ser array de strings contendo exatamente o valor configurado em `ACCESS_AUD`, sem aceitar coincidências parciais, audiência como string ou somente outro aplicativo. **Não basta selecionar nome no navegador.** Usar políticas Cloudflare Access com identidades permitidas; configurar secrets `ACCESS_AUD`, `ACCESS_TEAM_DOMAIN`, `APPS_SCRIPT_URL`, `APPS_SCRIPT_SECRET` no ambiente autorizado. Nunca os incluir no Git. O backend Apps Script valida segredo em toda ação, resolve email autenticado em Profiles e ignora perfis do navegador. A URL pública do Apps Script pode ser chamada, mas não deve autorizar acesso sem segredo. O segredo não deve aparecer em logs ou dados da planilha. O endpoint de certificados exige acesso externo; não foi testado com conta real.
 
 ## API
 - GET /api/health: `{ok:true,data:{version,status}}`, sem autenticação.
@@ -21,3 +21,8 @@ Script Properties: `CONAHP_SHARED_SECRET` igual a `APPS_SCRIPT_SECRET`; `CONAHP_
 
 ## Decisões
 Reutilizar conceitos/stack do RIW, não suas URLs/JSONP/seleção livre de perfil; frontend M1 intencionalmente mínimo. Nenhum ícone PWA real, polimento de grade ou programa oficial: pendências M2. Testes de verdade em dispositivos, acesso por celular e segurança em produção dependem de gate de integração M3.
+
+## Evidência de validação de JWT sintético (M1)
+- `tests/access-jwt.test.mjs` invoca a implementação **real** `verifyAccess` com tokens RS256 sintéticos assinados por chave RSA de teste, JWKS de teste, relógio local e `fetch` simulado. Casos: audiência exata em array (inclusive array com múltiplas audiências), array de outra audiência, string `aud` incorreta, expiração, assinatura inválida, `nbf` futuro/passado/inválido, emissor errado, `iat` futuro e token ausente.
+- `tests/worker.test.mjs` mantém testes da API e perfis com identidade injetada somente em testes. Isso não equivale a validar o Access real.
+- Validação de criptografia real, Cloudflare Access/Apps Script reais e deployment continuam fora deste gate, sujeitos a autorização específica. Configuração de `ACCESS_TEAM_DOMAIN` requer URL HTTPS da equipe, sem caminho adicional.
