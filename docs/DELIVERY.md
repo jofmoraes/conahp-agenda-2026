@@ -1,6 +1,6 @@
 # Estado operacional - CONAHP Agenda 2026
 
-Atualizado em: **2026-10-09**. **M1/M2 aceitas como entregas locais; M3 Etapa A complementada após auditoria de autenticação/UX, em READY_FOR_EXTERNAL_GATE_REAUDIT (aguardando decisão do orquestrador).**
+Atualizado em: **2026-10-09**. **M1/M2 aceitas localmente; M3 Etapa A autenticação/UX aceita pelo orquestrador. B0 READ-ONLY concluído: READY_FOR_B1_AUTHORIZATION, ainda sem autorização para criar serviços.**
 
 ## Repositório, branch e segurança
 - Repositório público: `jofmoraes/conahp-agenda-2026`.
@@ -76,3 +76,28 @@ O orquestrador deve reauditar a Etapa A, incluindo o hash do arquivo JSON origin
 
 ### Próximo bloqueio externo
 **Pendente autorização específica:** validar em Cloudflare real que um único Access Application admite os três caminhos e o mesmo AUD, política/identidades e retorno a página; integrar Apps Script/Sheets privados, configurar secrets fora Git, testar usuários reais e PWA HTTPS/offline; inspecionar Workers Builds, webhooks, branch policies antes de deploy/merge. **NENHUMA etapa B executada**; sem main/PR/Code Review/Codex/Work/serviços reais/alterações RIW-GSH. Issue #3 deve ficar OPEN até auditoria.
+
+## M3 - Etapa B0: preflight read-only (2026-10-09)
+
+**Decisão do orquestrador:** a última auditoria da Issue #3 aceitou `READY_FOR_EXTERNAL_GATE_REAUDIT` apenas como preparação técnica, autorizando **B0 em leitura**. B1 e B2-B5 exigem **autorizações expressas separadas**. Nenhum teste local foi repetido neste B0 porque a auditoria aceitou os testes de 36/36 Node, 35/35 Chromium e JSON/CSV original hash-verificado. Não usar essas métricas como prova de integração real.
+
+**Documento operacional canônico:** [docs/M3_B0_PREFLIGHT.md](M3_B0_PREFLIGHT.md) (inventário, verificações não disponíveis, cookie Access, plano Sheets sintético, aceite de risco Apps Script, B1-B5 e rollback).
+
+### GitHub - fatos verificáveis por consulta read-only
+- Repositório público; `main` segue `59635a399b686192bb9b9400f2e1d315df5bac4f`. HEAD técnico antes da documentação B0: `33f3c09096a4e2ffa3704d63827272ec82087b44`. Commits B0 são exclusivamente documentais, todos na `feat/m1-foundation`.
+- Árvore Git sem `.github/workflows`; API Actions: **0 workflow runs registrados**; HEAD técnico: **0 check runs e nenhum commit status retornado**. Rulesets: `[]`; listagem de branches: `protected:false` para ambas. `allow_auto_merge:false` no metadado do repositório. Isto **não prova ausência de deploy automático**.
+- **Não verificáveis pelo conector:** GitHub Settings > Webhooks, Environments, páginas/deployments, lista de workflows e branch protection detalhada (endpoint 403). Cloudflare Workers Builds, GitHub integrations, deploy hooks, domínios/rotas e planos/custos efetivos **não acessíveis por ferramenta de leitura**. Exigir inspeção manual autorizada antes de qualquer push/merge e antes de B4/B5.
+- **Nenhuma** automação, workflow ou build foi criada ou acionada neste B0.
+
+### Cloudflare - capacidade documentada versus conta não verificada
+- Documentação oficial Access permite `destinations` com paths em **uma** aplicação/um AUD. Design mantido para `/auth/login`, `/api/me`, `/api/preferences`, preservando shell e `/api/schedule` públicos.
+- Requisito crítico de cookie confirmado na documentação: **Cookie Path Attribute desabilitado**, para não restringir `CF_Authorization` somente a `/auth/login` no mesmo domínio. Conferir Path/Domain/SameSite, sessão global x aplicação, sessão expirada e retorno 303 em navegador real no B3.
+- `wrangler.jsonc` com `workers_dev:false`, `preview_urls:false`, sem custom domain/route definido. **Nenhum hostname público aprovado**. Custom Domain exige zona ativa Cloudflare; alternativa workers.dev demandaria aprovação de desenho, configuração e smoke, não é fallback tácito.
+- Não foi possível examinar conta, zona, Worker, Access Application, IdP, domínio, cookies ou vínculo de CI/CD efetivo; **não declarar que estejam configurados ou ausentes**.
+
+### Sheets/Apps Script e próximo gate
+- B1 pronta apenas no papel: planilha CONAHP nova, **privada e independente**, 4 abas (`Profiles`, `Sessions`, `Preferences`, `SourceLog`), importar **32 registros oficiais** com 110 participações e IDs fixos `c26-s001..c26-s032`, 2 perfis fictícios `example.invalid` **inativos**, sem decisões individuais. Comando já comprovado: `npm run --silent schedule:csv > sessions.csv` (33 registros CSV lógicos/10 colunas); revisar hash e fonte imediatamente antes de importar. **Nenhuma planilha foi criada.**
+- B2 depende de **aceite separado de risco residual**: Apps Script Web App com acesso público sob conta implantadora e segredo compartilhado; se segredo vazar, invasor pode declarar qualquer e-mail e acessar/escrever preferências daquele perfil. Alternativa com autenticação mais restrita exige nova decisão de arquitetura; **não presumir risco aceito**.
+- Gate B1 requer aprovação expressa para **criar 1 planilha privada, 4 abas, importar somente programação pública e registrar 2 perfis sintéticos inativos, sem nenhum compartilhamento externo**. B2 (Apps Script/segredos/publicação), B3 (Access/AUD/cookies), B4 (Worker/HTTPS/deploy) e B5 (teste real/merge/distribuição) **não autorizados**. Planos pagos, domínio novo ou quotas além de Free devem gerar nova aprovação.
+
+**Status final do B0: `READY_FOR_B1_AUTHORIZATION`**, sujeito à auditoria do orquestrador; Issue #3 OPEN. Nenhum PR, Code Review, Codex/Work, deploy, Google/Cloudflare real, alteração da `main`, RIW ou GSH. Não afirmar `READY_FOR_RELEASE` / `RELEASED`.
