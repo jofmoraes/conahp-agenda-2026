@@ -1,0 +1,34 @@
+# M3 Etapa A - Revisão de segurança e integração (2026-10-09)
+
+**Escopo**: código versionado em `feat/m1-foundation`, testes locais/sintéticos; nenhum serviço externo configurado. Nível de confiança: revisão de código e simulações; **não constitui auditoria de infraestrutura real**.
+
+| Área | Verificação / correção | Resultado local | Gate externo |
+|---|---|---|---|
+| Cloudflare Access | `Cf-Access-Jwt-Assertion`, JWT assinado RS256 contra JWKS do team domain, `iss`, `aud` array exato, `iat`, `exp`, `nbf`; sem seleção de perfil no navegador | 6 testes JWT reais assinados com chave sintética dentro de `npm test` PASS | JWT real de 2 identidades e políticas Access; testar celular |
+| Worker autorização | `/api/me`, `/api/preferences` exigem identidade validada; cliente `profileId`/`email`/campos extras rejeitados; resposta privada `no-store` | testes unitários PASS | identidade externa e cross-profile real |
+| Worker -> Apps Script | URL de upstream restringida a `https://script.google.com/macros/s/<id>/exec`; POST não segue redirecionamentos automaticamente; aceita 301/302/303 **somente para** `https://script.googleusercontent.com/macros/echo`, segunda chamada GET sem segredo; nega 307/308 e destino estranho | `tests/backend-redirect.test.mjs`, 4/4 PASS em Node com fetch falso | conferir resposta real Apps Script e redirecionamento; caso incompatível, revisar com segurança antes de habilitar |
+| Apps Script público | Cada `doPost` exige `CONAHP_SHARED_SECRET` em Properties; perfil ativo é resolvido pelo e-mail recebido do Worker; sessões só permitem IDs da aba Sessions | 8/8 verificações de `Code.gs` original via JavaScript isolado com SpreadsheetApp/Lock/Properties/ContentService sintéticos, sem Google real | aceitar risco residual de acesso público com segredo de aplicação; negar bypass direto, avaliar alternativas |
+| Fórmula em planilha | Campos `comment`/`questions` que iniciam (após espaços) `=`, `+`, `-` ou `@` recebem apóstrofo antes de escrever; leitura pós-gravação também compara interesse, prioridade e intenção quando alterados | `safeSheetText` do arquivo original verificado e simulado com Sheets falso | confirmar que o apóstrofo escapa fórmula e como `getValues()` devolve o valor; não permitir comandos executáveis |
+| Frontend | textos HTML escapados; links de fonte restritos a HTTPS; `POST` exige JSON e status de gravação confirmado antes de atualizar estado | código/Chromium sintético 13/13 PASS | teste em navegação HTTPS real, tela pequena, refresh e erro de rede |
+| CORS/CSRF | API same-origin; requisições privadas POST exigem JSON; sem `Access-Control-Allow-Origin:*`; Access deve proteger rotas privadas e JWT ainda verificado no Worker | inspeção estática e validação de tipos | conferir preflight, cookies e headers em navegador real |
+| PWA | cache somente shell público e `GET /api/schedule`; `/api/me` e preferências nunca interceptados pelo SW | Node `tests/service-worker.test.mjs` PASS; navegador com fetch simulado | offline público sob HTTPS real e inspecionar Cache Storage, privacidade e instalação |
+| Origem de dados | JSON completo GitHub auditado no executor JS, 32 sessões, 16 por dia, 21 pares simultâneos, IDs estáveis; atualização c26-s018 sem quebrar ID | V8 sobre conteúdo integral: erro 0, CSV avaliado; 110 participações | executar `npm run schedule:check` e CSV em checkout do **JSON binariamente idêntico**, conferir SHA remoto |
+| Triggers de deploy | branch apenas; tree sem workflows; `workers_dev=false` e `preview_urls=false` | GitHub tree e wrangler inspecionados | Cloudflare Builds, webhooks, branch policies e rotas **ainda não verificáveis** pelo conector |
+
+## Riscos residuais relevantes
+
+1. **ALTO se mal configurado:** publicar Apps Script `execute as me` com acesso anônimo amplia a superfície de ataque. A autenticação real é o segredo compartilhado. Comprometimento do segredo possibilita forjar e-mails e acessar qualquer perfil no backend; nunca tratar segredo como identificação de usuário ou publicar em frontend/Git/Issue. Antes do deploy obter aceite do risco, segredos fortes/rotação/monitoramento e avaliar gateway alternativo se inadequado.
+2. **ALTO se má política:** colocar todo o hostname atrás do Cloudflare Access pode bloquear a agenda pública/offline, enquanto deixar rotas privadas desprotegidas depende da validação JWT no Worker. Testar as duas condições e escolher aplicações/paths corretos.
+3. **MÉDIO:** eventuais mudanças da programação oficial não são sincronizadas automaticamente; conservar IDs e não sobrescrever preferências. Registrar divergências editoriais (Eduarda Jorge/Davidovic, Diogo Dias/Porto Dias) sem inferir equivalência.
+4. **MÉDIO:** Google Apps Script e Workers Free têm quotas/limites. Verificar latência de verificação JWT, disponibilidade e rate limits em conta real antes de liberar.
+5. **MÉDIO:** verificação local de redirect Google e de tratamento de apóstrofos em Sheets foi feita com mocks; comportamento exato de redirecionamento/planilha real pode diferir. Falha do contrato real é gate de bloqueio, nunca justificar relaxar domínio ou encaminhar segredo.
+6. **LIMITAÇÃO DE EVIDÊNCIA:** `npm test` 26/26, `npm run check` e browser 13/13 executados em Node/Chromium sobre arquivos de código hash-verificados; a cópia local de `public/schedule.json` ainda é fixture de metadados diferente do blob GitHub. **Os comandos Node `schedule:check` e `schedule:csv` não foram executados sobre os bytes originais**, embora o conteúdo integral original tenha sido processado e auditado no ambiente JavaScript do conector. Não afirmar conclusão binária do gate da Issue #2 enquanto persistir essa limitação; exigir no checklist externo ou na auditoria com checkout fiel.
+
+## Verificações executadas
+
+- Node.js 22.16.0 `npm test`: **26/26 PASS** (JWT, API, perfis, filtros, colisões, SW, e 4 novos cenários de redirecionamento).
+- `npm run check`: **PASS** para Worker, app, utilitários, SW e exportador.
+- `python tests/browser-smoke.py`: **13/13 PASS**, Chromium headless em DOM local, backend fictício e tela móvel.
+- `Code.gs` original (blob `c15d1c888ce9a67dcfc254074ebdaac4e101ccb4`) avaliado com 8 cenários em runtime JavaScript com Google Sheets simulado: **8/8 PASS**.
+- `public/schedule.json` original anterior, SHA blob `6fa8e62...`, **38.462 bytes**, auditado integralmente: 32, 16+16, 109 participações e 21 pares, sem erros estruturais. Nova versão com Zeke Emanuel, SHA blob `9ab9fb499255d52d03a57d0130af8d25d6f61b6e`, **38.921 bytes**, 110 participações, 32 IDs, 21 pares, zero erro; CSV avaliado com 33 linhas, **10.456 bytes** em JavaScript do conector.
+- Fontes de método: https://developers.cloudflare.com/cloudflare-one/access-controls/applications/http-apps/authorization-cookie/validating-json/ ; https://developers.google.com/apps-script/reference/spreadsheet/sheet ; https://conahp.org.br/conahp-2026/
