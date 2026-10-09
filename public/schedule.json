@@ -2,7 +2,7 @@
   "source": "https://conahp.org.br/conahp-2026/",
   "checkedAt": "2026-10-09",
   "updatedAt": "2026-10-09T00:00:00-03:00",
-  "note": "Transcrição manual auditável da grade publicada; programação sujeita a atualização. Nomes e instituições reproduzidos de fonte oficial e podem requerer revisão de grafia. Identificadores c26-sNNN atribuídos uma única vez e independentes de data/horário/palco; futuras revisões devem preservar IDs.",
+  "note": "Transcrição manual auditável da grade publicada; programação sujeita a atualização. Nomes e instituições reproduzidos de fonte oficial e podem requerer revisão de grafia. Identificadores c26-sNNN atribuídos uma única vez e independentes de data/horário/palco; futuras revisões devem preservar IDs. Revalidação de 09/10: Zeke Emanuel incluído em c26-s018 segundo a grade oficial vigente.",
   "sessions": [
     {
       "id": "c26-s001",
@@ -650,7 +650,7 @@
       "track": "Compromissos setoriais",
       "stage": "Palco - Compromissos setoriais",
       "title": "Ética, financiamento da saúde e escolhas difíceis do sistema",
-      "speakers": "Arthur Aguillar | IEPS; Nelson Teich; Francisco Balestrin (moderador) | Sindhosp; Fernanda de Negri | Ministério da Saúde",
+      "speakers": "Arthur Aguillar | IEPS; Nelson Teich; Francisco Balestrin (moderador) | Sindhosp; Fernanda de Negri | Ministério da Saúde; Zeke Emanuel (apresentador)",
       "source": "https://conahp.org.br/conahp-2026/",
       "verified": true,
       "verifiedAt": "2026-10-09",
@@ -674,6 +674,11 @@
           "name": "Fernanda de Negri",
           "role": "não informado",
           "institution": "Ministério da Saúde"
+        },
+        {
+          "name": "Zeke Emanuel",
+          "role": "apresentador",
+          "institution": "não informada"
         }
       ],
       "status": "published",
@@ -681,6 +686,11 @@
         {
           "url": "https://conahp.org.br/conahp-2026/",
           "verifiedAt": "2026-10-09"
+        },
+        {
+          "url": "https://conahp.org.br/conahp-2026/",
+          "verifiedAt": "2026-10-09",
+          "note": "Fonte oficial agora inclui Zeke Emanuel como apresentador; ID preservado"
         }
       ]
     },
