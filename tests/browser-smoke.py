@@ -14,19 +14,27 @@ FIXTURE=dict(checkedAt='2026-10-09',sessions=[
  session('c26-t001','2026-10-14','12:00','13:15','A era da agent AI na saúde','Tecnologia','April Saathoff | Johns Hopkins'),
  session('c26-t002','2026-10-14','12:00','13:15','Sistemas de saúde sob pressão','Compromissos','Paulo Chapchap | Hospital Beta'),
  session('c26-t003','2026-10-15','09:00','10:15','O trabalho em saúde','Pessoas','Michelle Schneider')])
-INIT='''({util,app,fixture})=>{
- window.__store={flora:{},juliana:{}};window.__writeFailure=false;
+INIT='''({util,app,fixture,mode='valid'})=>{
+ window.__store={flora:{},juliana:{}};window.__writeFailure=false;window.__authMode=mode;window.__expiredWrite=false;
+ const json=(data,status=200)=>new Response(JSON.stringify(data),{status,headers:{'content-type':'application/json'}});
  window.fetch=async (url,options={})=>{
   const action=String(url).replace(/^\\/api\\//,'');
-  if(action==='schedule')return new Response(JSON.stringify({ok:true,data:fixture}));
-  if(action==='me')return new Response(JSON.stringify({ok:true,data:{id:'flora',label:'Flora'}}));
-  if(action==='preferences'&&(options.method||'GET')==='GET')return new Response(JSON.stringify({ok:true,data:{items:Object.values(window.__store.flora)}}));
-  if(action==='preferences'&&options.method==='POST'){
-   if(window.__writeFailure)return new Response(JSON.stringify({ok:false,error:{message:'Falha sintética'}}),{status:502});
-   const data=JSON.parse(options.body);window.__store.flora[data.sessionId]=data;
-   return new Response(JSON.stringify({ok:true,data}));
+  if(action==='schedule')return json({ok:true,data:fixture});
+  if(action==='me'||action==='preferences'){
+   if(window.__authMode==='401')return json({ok:false,error:{code:'UNAUTHENTICATED',message:'Login requerido'}},401);
+   if(window.__authMode==='403')return json({ok:false,error:{code:'FORBIDDEN',message:'Negado'}},403);
+   if(window.__authMode==='html')return new Response('<html>Access login</html>',{status:200,headers:{'content-type':'text/html'}});
+   if(window.__authMode==='redirect')return new Response(null,{status:302,headers:{location:'https://auth.example.invalid/login'}});
   }
-  return new Response('{}',{status:404});
+  if(action==='me')return json({ok:true,data:{id:'flora',label:'Flora'}});
+  if(action==='preferences'&&(options.method||'GET')==='GET')return json({ok:true,data:{items:Object.values(window.__store.flora)}});
+  if(action==='preferences'&&options.method==='POST'){
+   if(window.__expiredWrite)return json({ok:false,error:{code:'UNAUTHENTICATED',message:'Sessão expirada'}},401);
+   if(window.__writeFailure)return json({ok:false,error:{message:'Falha sintética'}},502);
+   const data=JSON.parse(options.body);window.__store.flora[data.sessionId]=data;
+   return json({ok:true,data});
+  }
+  return json({},404);
  };
  Object.assign(window,new Function(util.replaceAll('export ','')+';return {filterSessions,conflictIds,auditSchedule,minutes,layoutDay};')());
  new Function(app.replace(/^import[^\\n]*\\n/,''))();
@@ -42,6 +50,7 @@ def run():
   page.set_content(HTML);page.evaluate(INIT,dict(util=UTIL,app=APP,fixture=FIXTURE));page.wait_for_selector('article.session')
   check('3 sessions',page.locator('article.session').count()==3)
   check('authorized profile',page.locator('#identity').inner_text().endswith('Flora'))
+  check('login hidden for authorized profile',page.locator('#loginButton').is_hidden())
   page.locator('#search').fill('hospital beta');check('institution search',page.locator('article.session').count()==1)
   page.locator('#search').fill('');page.locator('#day').select_option('2026-10-15');check('second day',page.locator('article.session').count()==1)
   page.locator('#day').select_option('');page.locator('#view').select_option('grid');check('grid',page.locator('.grid-event').count()==3)
@@ -63,6 +72,39 @@ def run():
   phone.locator('#view').select_option('grid');check('mobile grid',phone.locator('.grid-event').count()==3)
   phone.locator('.grid-event').first.click();check('mobile detail',phone.locator('.grid-detail article').count()==1)
   check('mobile header',phone.locator('h1').is_visible())
+  # Public program stays visible when Access redirects or refuses API access.
+  for mode in ['401','403','html','redirect']:
+   gate=browser.new_page(viewport={'width':390,'height':844})
+   gate.set_content(HTML);gate.evaluate(INIT,dict(util=UTIL,app=APP,fixture=FIXTURE,mode=mode))
+   gate.wait_for_selector('article.session')
+   check('public agenda with '+mode,gate.locator('article.session').count()==3)
+   check('login shown '+mode,gate.locator('#loginButton').is_visible())
+   check('private editor hidden '+mode,gate.locator('[data-save]').count()==0)
+   check('meaningful message '+mode,'Resposta inválida' not in gate.locator('#identity').inner_text())
+   gate.close()
+  expired=browser.new_page()
+  expired.set_content(HTML);expired.evaluate(INIT,dict(util=UTIL,app=APP,fixture=FIXTURE))
+  expired.wait_for_selector('article.session')
+  expired.evaluate('window.__expiredWrite=true')
+  article=expired.locator('article.session').first
+  article.locator('summary').click()
+  article.locator('[data-field=comment]').fill('não confirmado')
+  article.locator('[data-save]').click()
+  expired.wait_for_timeout(100)
+  check('expired write announces unsaved', 'não salva' in expired.locator('#notice').inner_text())
+  check('expired write clears private editors',expired.locator('[data-save]').count()==0)
+  check('expired write offers login',expired.locator('#loginButton').is_visible())
+  check('expired write not persisted',expired.evaluate('Object.keys(window.__store.flora).length')==0)
+  expired.close()
+  # Navigate the top-level browser, not fetch(), to an Access-protected entry URL.
+  login=browser.new_page()
+  login.route('https://agenda.example.invalid/**',lambda route: route.fulfill(status=200,body=HTML if route.request.url.endswith('/') else 'Página de autenticação',content_type='text/html'))
+  login.goto('https://agenda.example.invalid/')
+  login.evaluate(INIT,dict(util=UTIL,app=APP,fixture=FIXTURE,mode='401'))
+  login.locator('#loginButton').click()
+  login.wait_for_url('https://agenda.example.invalid/auth/login')
+  check('login navigates to protected top-level route',login.url.endswith('/auth/login'))
+  login.close()
   browser.close()
  print('BROWSER_SMOKE:',len(checks),'PASS')
 if __name__=='__main__':run()
