@@ -1,6 +1,6 @@
 # Estado operacional - CONAHP Agenda 2026
 
-Atualizado em: **2026-10-09**. **M1/M2 aceitas localmente; M3 Etapa A autenticação/UX aceita pelo orquestrador. B0 READ-ONLY concluído: READY_FOR_B1_AUTHORIZATION, ainda sem autorização para criar serviços.**
+Atualizado em: **2026-10-09**. **M1/M2 aceitas localmente; M3 Etapa A e B0 aceitas pelo orquestrador. B1 Google Sheets executada sob autorização específica do usuário; B1_READY_FOR_AUDIT, aguardando revisão. B2–B5 NÃO autorizadas.**
 
 ## Repositório, branch e segurança
 - Repositório público: `jofmoraes/conahp-agenda-2026`.
@@ -101,3 +101,32 @@ O orquestrador deve reauditar a Etapa A, incluindo o hash do arquivo JSON origin
 - Gate B1 requer aprovação expressa para **criar 1 planilha privada, 4 abas, importar somente programação pública e registrar 2 perfis sintéticos inativos, sem nenhum compartilhamento externo**. B2 (Apps Script/segredos/publicação), B3 (Access/AUD/cookies), B4 (Worker/HTTPS/deploy) e B5 (teste real/merge/distribuição) **não autorizados**. Planos pagos, domínio novo ou quotas além de Free devem gerar nova aprovação.
 
 **Status final do B0: `READY_FOR_B1_AUTHORIZATION`**, sujeito à auditoria do orquestrador; Issue #3 OPEN. Nenhum PR, Code Review, Codex/Work, deploy, Google/Cloudflare real, alteração da `main`, RIW ou GSH. Não afirmar `READY_FOR_RELEASE` / `RELEASED`.
+
+## M3 - B1 Google Sheets independente, autorização explícita (2026-10-09)
+
+**Estado: `B1_READY_FOR_AUDIT`.** A autorização do usuário cobriu exclusivamente uma planilha Google Sheets privada com programação pública e dois perfis sintéticos inativos. Criado **um único** arquivo Google Sheets no Drive conectado, independente de RIW/GSH. Por privacidade, **nenhum URL, spreadsheetId, nome de proprietário, endereço de e-mail real, credencial ou dado privado do arquivo está neste repositório ou nos comentários da Issue**. O usuário pode obter o link apenas nesta conversa privada/Drive.
+
+### Origem e conteúdo
+- Origem canônica do import: `public/schedule.json`, blob Git `9ab9fb499255d52d03a57d0130af8d25d6f61b6e`, fotografia verificada em `2026-10-09`. Conferidos **32 itens (16 por dia), 110 participações públicas, IDs estáveis `c26-s001..` até `c26-s032`**, com fonte e datas. Fonte oficial de programação consultada em 2026-10-09, inclusive sessão de Zeke Emanuel em 15/10.
+- **`Sessions`**: cabeçalho exato `id,day,start,end,title,track,stage,source,verified,speakers`, 32 linhas de conteúdo; dados iguais aos campos de cada sessão JSON, sem alterar IDs ou inferir participações.
+- **`Profiles`**: cabeçalho `profileId,email,label,active`, somente dois placeholders `example.invalid` e `active=FALSE` (booleano), sem identidades reais ou autorização de acesso.
+- **`Preferences`**: cabeçalho `profileId,sessionId,interest,priority,attending,comment,questions,updatedAt`; **nenhum** registro de preferência/curadoria.
+- **`SourceLog`**: cabeçalho `sessionId,source,verifiedAt,note`, 32 linhas referenciando cada sessão/URL pública e data verificada; histórico com nota editorial quando disponível.
+- As quatro abas foram criadas com cabeçalhos congelados, formatação neutra legível, larguras definidas e filtros nas áreas tabulares de programação/histórico.
+
+### Evidências de leitura de volta (conector Google Drive/Sheets)
+- Metadados de workbook: **exatamente 4 abas**, com títulos `Sessions`, `Profiles`, `Preferences`, `SourceLog`.
+- Leitura de `Sessions!A1:J33` comparada **célula a célula** com o arquivo GitHub: **0 divergências**; 32 IDs únicos e sequência esperada; 16 sessões em cada dia na fonte.
+- Leitura de `Profiles!A1:D3`: **2 registros fictícios inativos**, domínios reservados `example.invalid`. Ausência de endereços pessoais reais.
+- Leitura de `Preferences!A1:H5`: apenas linha de cabeçalho, **zero preferências**.
+- Leitura de `SourceLog!A1:D33`: 32 registros com mesmo ID/ordem de Sessions e `verifiedAt=2026-10-09`.
+- Google Drive `files.get` depois da gravação: `shared=false`, **uma única permissão do tipo `user` com papel `owner`**, nenhuma permissão `anyone`, `domain`, `group` ou terceiro reportada. Arquivo nativo (Google Sheets), não compartilhado; observação: não equivale a auditoria organizacional de políticas externas à conta.
+- Consulta de células reais das quatro abas confirmou formatação aplicada ao cabeçalho (negrito + preenchimento), preservando tipos de valor; dados públicos guardados como textos literais, `active` e `verified` como booleanos.
+
+### Restrições preservadas e gates restantes
+- **Não executados:** projeto/deploy Apps Script, Script Properties, Cloudflare Access, JWT real, Worker, DNS/domínio, secrets, compartilhamento com Flora/Juliana, importação de dados privados, PR/Code Review, Codex/Work, alterações `main`, RIW/GSH.
+- **B2:** criar Apps Script, segredos e eventual Web App exige **nova autorização e aceite explícito do risco residual de endpoint público com segredo compartilhado**.
+- **B3:** Access único AUD/3 paths, Cookie Path Attribute desligado, login e contas reais exigem autorização e teste na conta Cloudflare.
+- **B4:** Worker/hostname HTTPS, secrets, rota/deploy manual e verificação de Builds/webhooks/CI exigem autorização antes de publicar.
+- **B5:** smoke integrado, mobile/PWA e disponibilização; qualquer merge `main` também necessita autorização independente.
+- Issue #3 permanece OPEN. **B1_READY_FOR_AUDIT não significa READY_FOR_RELEASE ou RELEASED.**
