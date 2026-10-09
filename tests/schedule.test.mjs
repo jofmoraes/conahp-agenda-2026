@@ -9,3 +9,10 @@ test('time and public session schema checks',()=>{assert.equal(minutes('09:35'),
 test('real conflicts require two attending choices',()=>{const prefs=new Map([['one',{interest:'Quero ir',attending:true}],['two',{interest:'Interesse',attending:false}]]);assert.equal(conflictIds(rows,prefs).size,0);prefs.set('two',{interest:'Interesse',attending:true});assert.deepEqual([...conflictIds(rows,prefs)].sort(),['one','two']);assert.equal(overlap(rows[0],rows[2]),false);});
 test('search and filters include speaker/institution and retain private decisions',()=>{const prefs=new Map([['two',{priority:'Alta',attending:true}]]);assert.equal(normalize('Inteligência'),'inteligencia');assert.equal(filterSessions(rows,{search:'hospital b'},prefs)[0].id,'two');assert.equal(filterSessions(rows,{search:'inteligencia'},prefs)[0].id,'one');assert.equal(filterSessions(rows,{day:'2026-10-15'},prefs).length,1);assert.equal(filterSessions(rows,{priority:'Alta'},prefs)[0].id,'two');assert.equal(filterSessions(rows,{attending:true},prefs)[0].id,'two');});
 test('schedule changes preserve IDs and detect malformed entries',()=>{const changed=[{...rows[0],start:'08:30'},rows[1],rows[2]];assert.equal(changed[0].id,rows[0].id);assert.equal(auditSchedule(changed).errors.length,0);assert.equal(auditSchedule([...rows,rows[0]]).errors.length,1);});
+
+test('time range includes overlapping sessions without false boundary intersections',()=>{
+ const prefs=new Map();
+ assert.equal(filterSessions(rows,{day:'2026-10-14',timeFrom:'09:45',timeTo:'10:10'},prefs).length,2);
+ assert.deepEqual(filterSessions(rows,{day:'2026-10-14',timeFrom:'10:00',timeTo:'10:30'},prefs).map(s=>s.id),['two']);
+ assert.equal(filterSessions(rows,{timeFrom:'12:00',timeTo:'13:00'},prefs).length,0);
+});
