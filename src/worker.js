@@ -58,7 +58,7 @@ export function createApp({identity=verifyAccess,backend=appsScript}={}) {
     if(!url.pathname.startsWith('/api/'))return env.ASSETS?env.ASSETS.fetch(request):fail(404,'NOT_FOUND','Recurso não encontrado.');
     if(url.pathname==='/api/health'&&request.method==='GET')return success({version:'m1',status:'ready'});
     if(url.pathname==='/api/schedule'&&request.method==='GET') {
-      try{return success(await backend(env,'schedule',null,{}),200,true)}catch{return fail(502,'SCHEDULE_UNAVAILABLE','Programação temporariamente indisponível.')}
+      try{if(env.ASSETS){const r=await env.ASSETS.fetch(new Request(new URL('/schedule.json',request.url)));if(!r.ok)throw Error('Arquivo público indisponível');const data=await r.json();if(!Array.isArray(data.sessions))throw Error('Formato inválido');return success(data,200,true)}return success(await backend(env,'schedule',null,{}),200,true)}catch{return fail(502,'SCHEDULE_UNAVAILABLE','Programação temporariamente indisponível.')}
     }
     if(!['/api/me','/api/preferences'].includes(url.pathname))return fail(404,'NOT_FOUND','Rota desconhecida.');
     if(!['GET','POST'].includes(request.method)||request.method==='POST'&&url.pathname!=='/api/preferences')return fail(405,'METHOD_NOT_ALLOWED','Método não permitido.');
