@@ -10,14 +10,14 @@ O Worker verifica assinatura RS256 do JWT `Cf-Access-Jwt-Assertion` contra as ch
 - GET /api/preferences: `{ok:true,data:{profile,items}}`, exige mesmo acesso.
 - POST /api/preferences: JSON `{sessionId,interest?,priority?,attending?,comment?,questions?}`, edição somente do perfil resolvido no servidor; retorno do registro persistido. `attending` significa intenção confirmada, não simples interesse. Erros HTTP com `{ok:false,error:{code,message}}`; sucesso não é exibido antes da confirmação.
 
-## Planilha futura (não criada)
+## Esquema da planilha (B1 criada e aceita; B2a sem script configurado)
 Abas com cabeçalhos exatos, linha 1:
 - Profiles: `profileId,email,label,active` (adicionar Flora e Juliana somente em ambiente privado autorizado; novas identidades por linha sem código).
 - Sessions: `id,day,start,end,title,track,stage,source,verified` (IDs permanentes, dados verificados de fonte oficial; data ISO AAAA-MM-DD, horas HH:MM).
 - Preferences: `profileId,sessionId,interest,priority,attending,comment,questions,updatedAt` (chave lógica composta profileId+sessionId).
 - SourceLog: `sessionId,source,verifiedAt,note` (origem e atualização, etapa M2).
 
-Script Properties: `CONAHP_SHARED_SECRET` igual a `APPS_SCRIPT_SECRET`; `CONAHP_SPREADSHEET_ID` da nova planilha independente. Versão do Code.gs no Git é canônica. Deploy do Apps Script com acesso público exige avaliação/aceite explícito do risco residual e segredo forte, independente do RIW. Cloudflare Access, Apps Script e planilha não configurados nesta missão.
+Script Properties: `CONAHP_SHARED_SECRET` igual a `APPS_SCRIPT_SECRET`; `CONAHP_SPREADSHEET_ID` da nova planilha independente. Versão do Code.gs no Git é canônica. Deploy do Apps Script com acesso público exige avaliação/aceite explícito do risco residual e segredo forte, independente do RIW. B1 criou uma planilha CONAHP privada isolada; **Cloudflare Access e projeto Apps Script ainda não configurados**. B2a tem autorização somente para preparar o script sem publicação; sua criação manual segue pendente.
 
 ## Decisões
 Reutilizar conceitos/stack do RIW, não suas URLs/JSONP/seleção livre de perfil; frontend M1 intencionalmente mínimo. Nenhum ícone PWA real, polimento de grade ou programa oficial: pendências M2. Testes de verdade em dispositivos, acesso por celular e segurança em produção dependem de gate de integração M3.
@@ -50,3 +50,8 @@ Reutilizar conceitos/stack do RIW, não suas URLs/JSONP/seleção livre de perfi
 - A agenda pode abrir anônima e consultar programação; `GET /api/me` não autenticado (401, 403, 302/HTML/opaque redirect) não bloqueia a consulta pública. Sessão expirada durante POST invalida estado privado local, não exibe sucesso falso e oferece novo login. Indicador opcional `/?access=denied` é **apenas informativo**, nunca altera autorização.
 - Testes locais: `npm test` **36/36 PASS**, `npm run check` PASS; Chromium sintético **35/35 PASS**. Navegação Access e perfis reais precisam de ambiente autorizado, conforme `docs/M3_ACCESS_LOGIN.md` e `docs/M3_EXTERNAL_GATE_PLAN.md`.
 - Gate de dados M2 resolvido: JSON oficial integral com Git blob `9ab9fb499255d52d03a57d0130af8d25d6f61b6e` (38.921 bytes) e código original executados em Node v22.16.0. `npm run schedule:check`: 32 sessões, 16 por dia, 110 participações, 21 sobreposições. `npm run --silent schedule:csv > sessions.csv`: **33 linhas lógicas de CSV, 10 colunas**. É necessário `--silent` para que mensagens de execução npm não corrompam o CSV. Ainda não há planilha real ou importação autorizada.
+
+## B2a - Preparação Apps Script sem Web App (2026-10-09)
+- Auditoria B1 aprovada, planilha privada existente; cabeçalhos/abas reais conferidos por leitura com o código original `backend/apps-script/Code.gs` (blob `be7b23f6c6f1381aca7042b9f0ef772290ccc0ad`); não foi necessário modificar código nem dados da planilha.
+- A criação de projeto Apps Script e configuração de Script Properties **não são suportadas pelo conector Google Drive/Sheets disponível**. Nenhum projeto Apps Script, segredo, valor de ID ou implantação foi criado/configurado pelo executor. Ver passos seguros em `docs/M3_B2A_APPS_SCRIPT_PREPARATION.md`.
+- Manter nomes `CONAHP_SPREADSHEET_ID`, `CONAHP_SHARED_SECRET`, mas não armazenar valores em arquivos públicos ou chats. Os dois perfis sintéticos permanecem **inativos**, não são contas de acesso; `Preferences` segue vazia. B2b (Web App) continua requerendo autorização separada e aceite de risco.
