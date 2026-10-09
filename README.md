@@ -41,3 +41,7 @@ Requer Node 22 ou compatível. `npm test` executa testes automatizados sem crede
 Programa público: `public/schedule.json` (32 itens em 14-15/10, revisão 2026-10-09). Auditoria e divergências: [docs/DATA_AUDIT.md](docs/DATA_AUDIT.md). Contrato de identidade e planilha: [docs/INTEGRATION.md](docs/INTEGRATION.md). O repositório não inclui autenticação de teste pública nem modo que permita selecionar arbitrariamente perfis.
 
 **Atenção:** nenhum serviço de produção foi criado; rodar a interface completa com gravação real requer autorização para configurar Cloudflare Access, Apps Script e planilha isolada. Preferências antigas do RIW nunca devem ser copiadas.
+
+### Smoke visual opcional
+
+Para reproduzir os testes de interface sem publicar o app: com Python, Playwright e Chromium disponíveis, execute `python tests/browser-smoke.py` na raiz. `CHROMIUM_PATH` permite definir o executável Chromium local (padrão Linux `/usr/bin/chromium`). A suíte usa HTML/JS da branch com backend e identidades sintéticas em memória, sem conexão externa. Na execução de 2026-10-09, **13/13 verificações PASS**; não substitui teste de login ou PWA offline em dispositivo real.
