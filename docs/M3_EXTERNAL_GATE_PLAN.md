@@ -18,7 +18,7 @@ Estado: **planejamento**, 2026-10-09. Esta documentação não autoriza criar co
   - Sessions: `id,day,start,end,title,track,stage,source,verified,speakers` (última coluna opcional)
   - Preferences: `profileId,sessionId,interest,priority,attending,comment,questions,updatedAt`
   - SourceLog: `sessionId,source,verifiedAt,note`
-- [ ] Rodar novamente `npm run schedule:check` no JSON completo; comparar IDs `c26-s001..c26-s032`, 16 registros por dia e 110 participações após atualização; exportar `npm run schedule:csv > sessions.csv`. Verificar UTF-8, fórmulas CSV e escapes antes de importar à aba Sessions. Não mudar IDs. Ativar `plain text` nas colunas de IDs.
+- [ ] Rodar novamente `npm run schedule:check` no JSON completo; comparar IDs `c26-s001..c26-s032`, 16 registros por dia e 110 participações após atualização; exportar `npm run --silent schedule:csv > sessions.csv`. Verificar UTF-8, fórmulas CSV e escapes antes de importar à aba Sessions. Não mudar IDs. Ativar `plain text` nas colunas de IDs.
 - [ ] Criar inicialmente apenas **perfis sintéticos privados** (nomes/e-mails de teste, nunca subir ao Git público). Depois, sob autorização, cadastrar identidades reais Flora e Juliana, individualmente: e-mail Access validado + perfilId independente; Juliana sem curadoria (`Não analisado`).
 - [ ] Conferir inexistência de dados pessoais no CSV/SourceLog e backup/versionamento da programação. Planilha private, não publicar link.
 
@@ -32,9 +32,10 @@ Estado: **planejamento**, 2026-10-09. Esta documentação não autoriza criar co
 
 ## B3 - Cloudflare Access e identidade (aprovação independente)
 
-- [ ] Cloudflare Zero Trust > **Access controls > Applications > Add an application**; proteger seletivamente caminhos `/api/me` e `/api/preferences` (e quaisquer rotas privadas futuras). **NÃO colocar /api/schedule e shell público atrás de uma política privada**, se offline/consulta pública forem necessários.
+- [ ] Cloudflare Zero Trust > **Access controls > Applications > Add an application**: criar **uma única aplicação Access self-hosted com uma única audiência (AUD)** e destinos protegidos `/auth/login`, `/api/me` e `/api/preferences`, sob o mesmo hostname e política Allow. Não criar duas aplicações com AUDs diferentes. Confirmar no painel/API que o plano permite os 3 destinos exatos sob uma aplicação; caso não permita, **interromper e aprovar mudança para prefixo privado único**, ajustando Worker e testes antes da implantação. Seguir `docs/M3_ACCESS_LOGIN.md`. **Não proteger `/`, arquivos estáticos, `/api/schedule` nem `/api/health`**, preservando agenda pública e cache offline.
 - [ ] Configurar método de login de baixo atrito (ex.: OTP por e-mail se compatível com plano e dispositivos), permitir **somente e-mails autorizados** e evitar seleção manual de perfil como autenticação. Testar deny por identidade não autorizada e e-mails falsos.
 - [ ] Copiar Application Audience Tag (AUD) e team domain HTTPS no painel. Como segredos/configs Cloudflare Worker (nunca no Git): `ACCESS_AUD`, `ACCESS_TEAM_DOMAIN`, `APPS_SCRIPT_URL`, `APPS_SCRIPT_SECRET`. Usar exatamente o AUD da aplicação; emitir JWT `aud` array e verificar assinatura RS256/JWKS, `iss`, `iat`, `exp`, `nbf`.
+- [ ] Testar navegação de topo no botão **Entrar** para `/auth/login`, retorno 303 ao shell público e mensagens 401/403/HTML/302 após expiração ou bloqueio. Se houver redirecionamento de bloqueio configurável, retornar opcionalmente para `/?access=denied`; esse parâmetro é apenas informação visual e jamais autoriza alguém.
 - [ ] Garantir roteamento Access realmente injete `Cf-Access-Jwt-Assertion` validado pelo Worker em requests privados, tanto em desktop quanto em celular; header forjado nunca deve autorizar requisição.
 - [ ] Em caso de mais de um perfil por e-mail, **rever contrato**, não criar múltiplos perfis sob uma identidade por atalho.
 
@@ -50,8 +51,8 @@ Estado: **planejamento**, 2026-10-09. Esta documentação não autoriza criar co
 | Teste | Cenário | Critério |
 |---|---|---|
 | Público | 14/10 e 15/10, 32 sessões, fontes/participantes | listagem/grade/filtros funcionais |
-| Auth | anônimo e identidade não cadastrada | 401/403; nenhuma preferência exposta |
-| Auth | token incorreto/expirado/AUD errado, header forjado | negado sem fallback |
+| Auth | anônimo e identidade não cadastrada | agenda pública visível; botão Entrar abre Access; APIs privadas 401/403 e nenhum dado exposto |
+| Auth | token incorreto/expirado/AUD errado, header forjado | negado sem fallback; erro amigável, CTA Entrar; nenhuma gravação confirmada |
 | Identidade | Flora salva sessão X, Juliana consulta X | Juliana não lê/grava valores da Flora |
 | Persistência | salvar, recarregar e reler por cada identidade | valores exatamente recuperados |
 | Validação | body `profileId`, `email`, `userId` forjados | 400 ou ignorados; nenhuma elevação |
@@ -79,3 +80,8 @@ Estado: **planejamento**, 2026-10-09. Esta documentação não autoriza criar co
 Cloudflare Zero Trust atualmente anuncia plano Free para equipes de até 50 usuários; Workers Free anuncia 100.000 requests/dia e limite de CPU de 10ms/request. Não é garantia de elegibilidade, desempenho da verificação RS256 ou gratuidade da configuração final; **verificar limites e plano antes de ativar**. Google Apps Script/Sheets possui quotas distintas por tipo de conta. Não assinar plano pago nem contratar suporte sem autorização explícita. Nenhum Codex/Work foi acionado.
 
 Fontes: https://developers.cloudflare.com/cloudflare-one/access-controls/applications/http-apps/authorization-cookie/validating-json/ ; https://developers.cloudflare.com/workers/platform/limits/ ; https://www.cloudflare.com/plans/zero-trust-services/ ; https://developers.google.com/apps-script/guides/services/quotas
+
+## Resultado do pré-gate local de 2026-10-09
+- A verificação dos arquivos originais foi reproduzida com hashes Git idênticos no Node 22.16.0: `npm test` **36/36 PASS**; `npm run check` **PASS**; `npm run schedule:check` **PASS** (32 sessões, 16+16, 110 participações); `npm run --silent schedule:csv > sessions.csv` gerou 33 registros CSV lógicos (cabeçalho+32), 10 colunas. Usar `--silent` evita banners do npm dentro do CSV.
+- `python tests/browser-smoke.py`: **35/35 PASS** com Chromium e respostas Access sintéticas. Navegação real para hostname do Access foi bloqueada no navegador de testes; o botão teve seu destino interceptado sinteticamente, não houve acesso real.
+- O plano detalhado de paths, retorno pós-login e AUD único está em `docs/M3_ACCESS_LOGIN.md`. A etapa B continua dependente de autorizações específicas para cada serviço e de testes reais antes de `RELEASED`.
