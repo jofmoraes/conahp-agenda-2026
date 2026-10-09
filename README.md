@@ -2,7 +2,7 @@
 
 Aplicativo PWA independente para consultar, selecionar e acompanhar a programação do CONAHP 2026 (14 e 15 de outubro, São Paulo).
 
-**Estado atual:** planejamento e preparação técnica. Ainda não existe app funcional neste repositório.
+**Estado da branch técnica `feat/m1-foundation`:** implementação local M1/M2 com programação oficial estruturada, busca, lista/grade, preferências isoladas por identidade, conflitos e PWA pública. **Não publicado, não integrado à `main`, não conectado a Cloudflare Access/Apps Script/Sheets reais.** A branch `main` ainda contém a documentação inicial.
 
 ## Objetivo
 Reaproveitar o aplicativo [RIW Agenda 2026](https://github.com/jofmoraes/riw-agenda-2026), preservando a experiência de agenda, busca, favoritos/prioridades, conflitos e comentários, adaptada ao CONAHP.
@@ -33,3 +33,11 @@ As Issues detalham missões completas de implementação. O chat orquestrador au
 - Fonte oficial: https://conahp.org.br/2026/
 - Repositório RIW: https://github.com/jofmoraes/riw-agenda-2026
 - GSH Contratos (referência metodológica, **não** base de código do projeto): https://github.com/jofmoraes/llm-gsh-contratos
+
+## Executar verificações locais
+
+Requer Node 22 ou compatível. `npm test` executa testes automatizados sem credenciais e sem conexão externa. `npm run check` verifica sintaxe de Worker, frontend, utilitários, service worker e exportador. `npm run schedule:check` valida a fotografia da programação oficial versionada; `npm run schedule:csv` imprime CSV para futura importação autorizada, sem modificar conta alguma.
+
+Programa público: `public/schedule.json` (32 itens em 14-15/10, revisão 2026-10-09). Auditoria e divergências: [docs/DATA_AUDIT.md](docs/DATA_AUDIT.md). Contrato de identidade e planilha: [docs/INTEGRATION.md](docs/INTEGRATION.md). O repositório não inclui autenticação de teste pública nem modo que permita selecionar arbitrariamente perfis.
+
+**Atenção:** nenhum serviço de produção foi criado; rodar a interface completa com gravação real requer autorização para configurar Cloudflare Access, Apps Script e planilha isolada. Preferências antigas do RIW nunca devem ser copiadas.
