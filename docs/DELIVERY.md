@@ -1,11 +1,11 @@
 # Estado operacional - CONAHP Agenda 2026
 
-Atualizado em: **2026-10-09**. **M1/M2 aceitas localmente; M3 Etapa A e B0 aceitas; B1 ACCEPTED pelo orquestrador após leitura real da planilha. B2a concluída manualmente segundo declaração e capturas do usuário, aprovada como B2A_ACCEPTED_USER_ATTESTED pelo orquestrador. Autorização abrangente B2b–B5 documentada na Issue #3, com execução sequencial/auditoria entre gates. B2b em preparação, publicação exige intervenção manual porque o conector não aciona controles do Apps Script. B3 ainda NÃO iniciado.**
+Atualizado em: **2026-10-09**. **M1/M2 aceitas localmente; M3 Etapa A e B0 aceitas; B1 ACCEPTED pelo orquestrador após leitura real da planilha. B2a concluída manualmente segundo declaração e capturas do usuário, aprovada como B2A_ACCEPTED_USER_ATTESTED pelo orquestrador. Autorização abrangente B2b–B5 documentada na Issue #3, com execução sequencial/auditoria entre gates. **B2b Web App publicado conforme declaração do usuário; GET real e 6/6 testes POST/read-only PASS informados pelo usuário; planilha B1 reconferida por conector, intacta; `B2B_READY_FOR_AUDIT` aguardando avaliação do orquestrador.** B3 ainda NÃO iniciado.**
 
 ## Repositório, branch e segurança
 - Repositório público: `jofmoraes/conahp-agenda-2026`.
 - Branch técnica única: `feat/m1-foundation` (consultar HEAD GitHub na Issue #3; histórico auditável). `main`: `59635a399b686192bb9b9400f2e1d315df5bac4f`, **não alterada**.
-- **Nenhum PR, Code Review, Codex/Work, deploy, GitHub Action nova, Cloudflare Access/Worker ativo ou Apps Script publicado.** Uma única planilha Google Sheets privada CONAHP foi criada e aprovada em B1; **nenhum projeto Apps Script real foi criado na B2a**. RIW/GSH intactos. Sem credenciais/URL de Apps Script RIW/dados pessoais no código público.
+- **Nenhum PR, Code Review, Codex/Work, GitHub Action nova, Cloudflare Access/Worker ou deploy de Worker.** O Web App Apps Script CONAHP foi **publicado pelo usuário para homologação**, com evidências reais dos testes reportadas e registradas abaixo. Uma única planilha Google Sheets privada CONAHP foi criada e aprovada em B1; o projeto Apps Script standalone foi preparado manualmente na B2a. RIW/GSH intactos. Sem credenciais/URL de Apps Script RIW/dados pessoais no código público.
 - A conexão GitHub por HTTPS no container falhou por DNS. Arquivos foram lidos/versionados pelo conector GitHub; para testes Node reconstruiu-se textualmente os arquivos e conferiram-se hashes SHA-1 de blob Git com as versões da branch (Worker, frontend, utilitários, scripts e testes). Distinguir reconstrução local de `git clone`.
 
 ## M1 - Fundação (Issue #1)
@@ -180,3 +180,24 @@ O orquestrador deve reauditar a Etapa A, incluindo o hash do arquivo JSON origin
 ### B2b - GET real confirmado pelo usuário (2026-10-09)
 
 O usuário reportou resposta JSON de `GET /exec` na Web app URL criada no projeto CONAHP: `ok:false`, `error.code:METHOD_NOT_ALLOWED`, `message:Use POST autenticado.`, `status:405` **no corpo JSON**. Isto confirma compatibilidade lógica da implementação `doGet()` publicada, por relato do usuário; não comprova status HTTP 405 nem valida as operações POST. Registro sem URL, deployment ID, segredo ou dados pessoais na Issue #3. Testes reais negativos POST e leitura da agenda permanecem pendentes; não iniciar B3 antes de auditoria.
+
+### B2b - Segurança real 6/6 PASS (relato do usuário), reconferência Sheets por conector (2026-10-09)
+
+**Evidência nova e prevalecente sobre os registros históricos de implantação pendente:** usuário executou localmente no Windows o script de teste `Testar_CONAHP_B2b.ps1` e informou a mensagem final **`RESULTADO FINAL: 6/6 PASS`**. O script original foi conferido em sua íntegra. O teste usa a URL privada do Web App digitada localmente, **não em GitHub**, faz POST para `/exec`, recusa redirects diferentes de 301/302/303 e só aceita destino HTTPS `script.googleusercontent.com/macros/echo` com segundo **GET sem segredo**, analisa JSON e exibe resultados. O segredo foi solicitado apenas em prompt oculto e não registrado no arquivo/Issue.
+
+| Caso | Validação HTTP/JSON pelo script local | Resultado informado |
+|---|---|---|
+| T1 | POST `action:me` sem segredo → `ok:false`, `FORBIDDEN` | PASS |
+| T2 | POST com segredo intencionalmente incorreto → `FORBIDDEN` | PASS |
+| T3 | POST com segredo real armazenado privadamente e identidade sintética desconhecida → `FORBIDDEN` | PASS |
+| T4 | POST com segredo real e perfil sintético A inativo → `FORBIDDEN` | PASS |
+| T5 | POST com segredo real e perfil sintético B inativo → `FORBIDDEN` | PASS |
+| T6 | POST `action:schedule`, segredo real → `ok:true` e **32 sessões** | PASS |
+
+Também foi informado anteriormente pelo usuário **GET /exec**: JSON `ok:false`, `error.code:METHOD_NOT_ALLOWED`, `status:405` lógico, conforme Code.gs canônico.
+
+**Verificação independente após os testes:** leitura da planilha Google Sheets privada pelo conector: **`Preferences` com zero registros**, **`Profiles` com apenas dois perfis sintéticos `active=false`**, `shared=false`, somente permissão `user/owner`. Nenhum dado/célula/permissão alterado durante a conferência. Nenhuma URL, Deployment ID, e-mail pessoal, segredo ou token foi publicado.
+
+**Precisão da evidência:** 6/6 provêm do script real executado pelo **usuário** e de seu resultado informado, não de requisições disparadas pelo conector. O script valida que *nenhum redirect inesperado foi aceito*; não prova que o Google emitiu redirect em todas as chamadas, nem verifica de forma independente os bytes do código efetivamente implantado ou escopos OAuth/versão no painel. **Gravação real positiva não foi testada** (perfis inativos), corretamente para não introduzir dados. Testes em Cloudflare, persistência real com perfis aprovados e PWA continuam para B3–B5.
+
+**Status:** `B2B_READY_FOR_AUDIT` com **smoke GET e 6/6 testes POST concluídos conforme relato, e leitura privada sem escrita confirmada**. Esperar parecer técnico do orquestrador antes de iniciar B3. **Não confundir com `READY_FOR_RELEASE` / `RELEASED`.** 
