@@ -1,6 +1,6 @@
 # Estado operacional - CONAHP Agenda 2026
 
-Atualizado em: **2026-10-09**. **M1/M2 aceitas localmente; M3 Etapa A e B0 aceitas; B1 ACCEPTED pelo orquestrador após leitura real da planilha. B2a autorizada para preparar Apps Script sem Web App; revisão de código/esquema concluída, projeto real depende de criação manual (conector sem capacidade Apps Script). B2A_READY_FOR_AUDIT com pendência explícita. B2b/B3/B4/B5 NÃO autorizadas.**
+Atualizado em: **2026-10-09**. **M1/M2 aceitas localmente; M3 Etapa A e B0 aceitas; B1 ACCEPTED pelo orquestrador após leitura real da planilha. B2a concluída manualmente segundo declaração e capturas do usuário, aprovada como B2A_ACCEPTED_USER_ATTESTED pelo orquestrador. Autorização abrangente B2b–B5 documentada na Issue #3, com execução sequencial/auditoria entre gates. B2b em preparação, publicação exige intervenção manual porque o conector não aciona controles do Apps Script. B3 ainda NÃO iniciado.**
 
 ## Repositório, branch e segurança
 - Repositório público: `jofmoraes/conahp-agenda-2026`.
@@ -153,3 +153,17 @@ O orquestrador deve reauditar a Etapa A, incluindo o hash do arquivo JSON origin
 **B2b separado:** antes de qualquer publicação Web App, obter **nova autorização e aceite explícito do risco de backend publicamente chamável com segredo compartilhado** (vazamento permitiria forjar e-mail/ler/gravar dados de perfis); revisar escopos, redirect `script.googleusercontent.com`, comportamento HTTP real, testes de bloqueio e rollback. B3 (Cloudflare AUD único), B4 (Worker/HTTPS) e B5 (smokes reais/merge) continuam sem aprovação.
 
 **Governança:** atualização somente em documentos da branch `feat/m1-foundation`, sem PR/Code Review, `main` intacta e sem modificações RIW/GSH. Issue #3 permanece OPEN para auditoria B2a.
+
+## M3 B2b - Publicação de homologação controlada (2026-10-09)
+
+**Autorização:** Issue #3 comentário `6091209447`, aceitação expressa pelo usuário do risco residual de Apps Script público com segredo compartilhado. B2a: usuário confirmou projeto Apps Script standalone CONAHP, código salvo, Script Properties presentes e zero deployments; o orquestrador aceitou a evidência como declaração apoiada por capturas (`B2A_ACCEPTED_USER_ATTESTED`), não como comparação por API de conteúdo/propriedades reais.
+
+**Verificação real B2b, somente leitura:** Opera Browser Connector localizou o projeto Apps Script correto já existente e leu `Manage deployments`: **This project has not been deployed yet / No active deployment / No archived deployments**. O conector fornece leitura de abas, screenshots e navegação, **não fornece clique, submissão de formulário nem Apps Script Projects API**. Logo **não foi executada publicação**. Configurações reais `execute as`, quem pode acessar, escopos OAuth e destino `/exec` permanecem inexistentes/não validados. Não foi criado outro projeto.
+
+**Dados preservados:** leitura de Drive/Sheets confirmou `shared=false`, permissões retornadas exclusivamente `user/owner`, `Preferences` **0 registros**, `Profiles` 2 perfis sintéticos `active=false`. Nenhuma célula alterada; nenhuma identidade real adicionada. Código canônico segue Git blob `be7b23f6c6f1381aca7042b9f0ef772290ccc0ad`; equivalência byte a byte do código salvo no editor real e valores das duas Script Properties **não acessíveis via conector**, não declarar conferidos.
+
+**Guia mínimo para publicação humana já autorizada:** [docs/M3_B2B_WEB_APP_HOMOLOGATION.md](M3_B2B_WEB_APP_HOMOLOGATION.md). Prevê no projeto existente `Implantar > Nova implantação > App da Web`, executar como proprietário, acesso `Qualquer pessoa` necessário ao Worker sem login Google, autorização OAuth estritamente necessária, uma implantação ativa, guardar URL/ID **somente no ambiente privado**. Não publicar se houver escopos imprevistos, plano pago ou desvio de configuração.
+
+**Testes reais pendentes, zero executados no Web App:** sem/segredo inválido, e-mail desconhecido, dois perfis fictícios inativos, resposta JSON, source schedule com 32 itens, redirecionamentos ContentService e inspeção de `Preferences` sem escrita. O código Apps Script não necessariamente define status HTTP real 4xx via `ContentService`: conferir JSON `ok:false` e código lógico, além de transporte. Não enviar segredo real em chat, comandos públicos, screenshot ou GitHub. Sem autorização de perfis ativos, não testar escrita real.
+
+**Status:** `B2B_READY_FOR_AUDIT` **COM BLOCKER MANUAL, NÃO IMPLANTADO E SEM SMOKE REAL**. Não significa publicação validada, READY_FOR_RELEASE ou RELEASED. B3 **não iniciado** antes da auditoria do orquestrador. Sem Cloudflare, PR, Code Review, Codex/Work, merge, alteração RIW/GSH ou serviços pagos.
