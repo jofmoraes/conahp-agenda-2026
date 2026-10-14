@@ -34,3 +34,16 @@ Data: 2026-10-14 (BRT). Branch `feat/b18-flora-ux`, baseada no HEAD B18-F `ad192
 - Produção estável B17 `dpl_AU2bxMsMMbThebHSYnZ2VdbFJk57` permanece como rollback sem apagar chaves do navegador. B18-F preview `dpl_Ex3YfvoJeD7AHdnbfLU4xmcWfimq` também preservada.
 
 **Status alvo: `B18_G_READY_FOR_OWNER_QA` (preview READY, homologação pelo proprietário ainda pendente).**
+
+
+## Preview implantada - verificação Vercel API (B18-G)
+
+- Preview exclusiva: https://conahp-flora-2026-2bril2m9p-joao-moraes-projects-9bc51b2e.vercel.app/
+- Deployment: `dpl_7mmy6qaoeESWouBhZGNpZy5r4Ar8`, projeto `prj_WUBhR8G0dDeyvESLAOc1jB3L5OwU`, Vercel `READY`; API listou 12 arquivos corretos.
+- Commit funcional B18-G: `f0469c7c51fd5f07e8f49dee43b9f84954088652`. Branch `feat/b18-flora-ux`, `main` inalterada.
+- Comparação SHA1 de arquivos publicados, idênticos à candidata testada: `b18.js=ce2f5339774af7fa03e625bc0bd6c56e10d45405`, `b18.css=e794fec61ce89c471e300230179144c962cbe65f`, `index.html=159a23c5f5b239f124a7e9b4d3a250f29cfe6588`, `manifest.webmanifest=e8969612104f3e205b81face97f1009c6f54fd3a`, `service-worker.js=611e3c131fff3d668b5f4668f4b0eba4699add10`. Agenda `0eb7a64a6d10afde2b9890969518a80024cdca03`, logo `b06b4ce8037cd67ff7bc06122931a16f49ed20b4` e quatro PNGs idênticos à B18-F.
+- `get_alias(conahp-flora-2026.vercel.app)` confirmou B17 `dpl_AU2bxMsMMbThebHSYnZ2VdbFJk57` ainda na URL de produção. Preview B18-F e o rollback B17 permanecem intactos.
+- Pacote de auditoria: https://drive.google.com/file/d/1q35JVK1NfeK0YGgvt7IORHbjSmSzv7CV/view ; SHA-256 `9b9b4ad136d9295a76b4980991548001314b322c8fecccb5616e2a4bae4c9123` (20 arquivos, 12 assets, testes, docs e hashes).
+- Smoke HTTP real do hostname Vercel e uso Android físico **NOT_RUN**; `localhost` também bloqueado (`ERR_BLOCKED_BY_ADMINISTRATOR`). Testes Chromium DOM foram executados em seis larguras e passaram. A implementação não cria sincronização remota.
+
+**Entrega:** `B18_G_READY_FOR_OWNER_QA`, sem promoção à URL estável. Para testar dados já salvos em outra origem, fazer primeiro backup JSON na URL antiga e importar manualmente na nova preview. Promoção futura somente após QA e autorização explícita, rollback pelo deployment B17 acima sem apagar `localStorage`.
