@@ -26,3 +26,10 @@ Vercel Blob 403 sem alteração de permissão, não repetir. Sheets via API do s
 ## Correção e regressão B18-E
 
 Na primeira abertura B18 deve usar **Agenda** mesmo quando o B17 antigo persistia `view=list` automaticamente por padrão. A preferência explícita nova usa `b18ViewChoice` dentro da chave UI existente; após o usuário escolher Lista ou Agenda, a escolha se mantém em reload. Teste de recarga sintética em Chromium confirmou que `Interesse` antigo permanece intocado no armazenamento original, mapeamento visual `Talvez` não vira escolha automática, comentários/perguntas/intenção persistem na chave B18 e dia/visualização mantêm a última escolha. Não equivale à verificação com os dados B17 reais da Flora.
+
+
+### Atenção: origem da prévia
+
+A prévia Vercel usa **hostname diferente** do alias de produção. `localStorage` é isolado por origem: abrir preview NÃO recupera automaticamente os registros que Flora já tem no domínio `conahp-flora-2026.vercel.app`. Para conferir o conteúdo com segurança, exportar backup na B17 no domínio atual e importar o JSON na prévia B18 (sem marcar sobrescrita por padrão). Mesmo esse teste não comprova migração automática das chaves da B17, que exige primeiro uso no mesmo hostname de produção depois de backup. Não afirmar perda de dados se a prévia começa com Minha agenda vazia; o armazenamento é outro.
+
+Implantação de prévia corrigida (readback Vercel READY e 12 hashes corretos): `dpl_Fp596egAVphFPGpgZ5CCZn2n7EwK`, https://conahp-flora-2026-3h2aok23h-joao-moraes-projects-9bc51b2e.vercel.app . API Vercel confirmou que o alias principal ainda aponta para B17 `dpl_AU2bxMsMMbThebHSYnZ2VdbFJk57`.
