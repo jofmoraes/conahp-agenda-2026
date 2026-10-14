@@ -193,3 +193,18 @@ html.app-loaded,body.app-loaded{background:#f3f7f8}
 .tabs [data-tab="mine"] .mine-label{min-width:0;text-align:center;white-space:nowrap}
 @media(max-width:360px){.tabs [data-tab="mine"]{grid-template-columns:minmax(0,1fr) 21px;gap:4px}}
 @media(max-width:680px){.legend-states .key,.legend-extras .key{font-size:11px}}
+
+/* B18-I: global Minha agenda, full-day grids and immediate decisions */
+[hidden]{display:none!important}
+.scope-note{margin:12px 0;padding:10px 12px;background:#e9f4f8;color:#19445a;border-left:3px solid #347297;border-radius:7px;font-size:13px;line-height:1.4}
+.day-section{margin:14px 0 24px;min-width:0}
+.day-section .day-title{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;font-size:19px;margin:14px 0 10px}
+.day-total{font-size:13px;font-weight:650;color:#476b7c}
+.legend{justify-content:space-between}
+.list-interest .interest-choice{font-size:clamp(11px,2.7vw,12px);padding:5px 7px;min-width:0}
+.event.service,.list-card.service{background:#fbfcfd!important;box-shadow:inset 0 0 0 1px #e4eaed}
+.list-card .service-caption{color:#49616e}
+.list-actions .agenda-remove,.modal-attend.selected.agenda-remove{appearance:none;-webkit-appearance:none;background:#d7eaf3!important;color:#174660!important;border:2px solid #8db8cb!important;border-radius:9px!important;box-shadow:none!important;text-shadow:none!important;outline-offset:2px}
+.list-actions .agenda-remove:focus-visible,.modal-attend.selected.agenda-remove:focus-visible{outline:3px solid #29a9c6;outline-offset:2px}
+.modal-attend{border-radius:9px}
+@media(max-width:360px){.list-interest{gap:3px}.list-interest .interest-choice{font-size:11px;padding:5px 5px}}

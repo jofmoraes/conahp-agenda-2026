@@ -13,7 +13,7 @@ assert len(schedule['sessions'])==32 and len(set(s['id'] for s in schedule['sess
 assert all(s['day'] in ('2026-10-14','2026-10-15') for s in schedule['sessions'])
 assert (PUB/'index.html').read_text().count('Carregando agenda')==1
 assert (PUB/'index.html').read_text().count('14 e 15 de outubro · São Paulo')==1
-assert 'conahp-b18h-public-v1' in (PUB/'service-worker.js').read_text()
+assert 'conahp-b18i-public-v1' in (PUB/'service-worker.js').read_text()
 orig=Path('/mnt/data/CONAHP_B18G_UX_FLORA_READY_FOR_OWNER_QA.zip')
 with zipfile.ZipFile(orig) as z:
  for name in ['schedule.json','schedule-utils.js','logo-conahp.svg','icon-192.png','icon-512.png','icon-maskable-192.png','icon-maskable-512.png','manifest.webmanifest']:
@@ -61,7 +61,7 @@ with sync_playwright() as pw:
   assert service.get_attribute('role')=='note'
   val=service.evaluate('e=>({l:getComputedStyle(e).borderLeftColor,b:getComputedStyle(e).borderTopColor,bg:getComputedStyle(e).backgroundColor,color:getComputedStyle(e).color})')
   assert val['l']=='rgb(255, 255, 255)' and val['b']!='rgb(255, 255, 255)',(w,val)
-  assert val['bg']=='rgb(248, 250, 251)',val
+  assert val['bg']=='rgb(251, 252, 253)',val
   # At 12:00 three sessions must be separate columns and title be promoted above stage.
   triple=page.locator('.event[data-open="c26-s005"],.event[data-open="c26-s006"],.event[data-open="c26-s007"]')
   assert triple.count()==3

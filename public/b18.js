@@ -58,23 +58,27 @@ function relativeMatch(s){if(st.relative==='all')return true;const now=dateInSao
 function alignment(s){if(isService(s))return null;const title=normalize(s.title),track=normalize(s.track),text=title+' '+track;const hit=[];for(const [topic,...terms] of TOPIC_TERMS)if(terms.some(t=>text.includes(normalize(t))))hit.push(topic);const count=hit.length;
  const quality=(s.description||s.summary)?'Média':'Baixa';let value=count>=2?'Alta':count===1?'Possível':'Indeterminada';const why=count?`O título ou a trilha sugere ${hit.slice(0,3).join(', ')}. ${quality==='Baixa'?'Não há descrição suficiente para confirmar o conteúdo.':'Confira o conteúdo antes de decidir.'}`:'O título e a trilha não fornecem evidências suficientes para relacionar esta sessão aos temas de Flora.';
  return {value,quality,why};}
-function matches(s,conflicts){if(s.day!==st.day)return false;if(st.tab==='mine'&&!saved(s))return false;if(st.attend&&!saved(s))return false;if(st.conflict&&!conflicts.has(s.id))return false;if(st.interest&&canonical(pref(s.id).interest)!==st.interest)return false;if(st.track&&s.track!==st.track)return false;if(st.priority&&(st.priority==='Sem'?!!pref(s.id).priority:pref(s.id).priority!==st.priority))return false;if(st.from&&s.end<=st.from||st.to&&s.start>=st.to)return false;if(!relativeMatch(s))return false;if(st.search&&!normalize([s.title,s.track,s.stage,s.speakers,...(s.participants||[]).flatMap(p=>[p.name,p.role,p.institution])].join(' ')).includes(normalize(st.search)))return false;return true}
-function updateControls(){for(const b of document.querySelectorAll('[data-tab]')){const active=b.dataset.tab===st.tab;b.classList.toggle('active',active);b.setAttribute('aria-selected',String(active))}for(const b of document.querySelectorAll('[data-day]')){const active=b.dataset.day===st.day;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))}for(const b of document.querySelectorAll('[data-view]')){const active=b.dataset.view===st.view;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))}const fields={interestFilter:st.interest,trackFilter:st.track,startFilter:st.from,endFilter:st.to};for(const [k,v] of Object.entries(fields))$(k).value=v;for(const [attr,value] of [['data-filter-priority',st.priority],['data-filter-now',st.relative]])for(const b of document.querySelectorAll('['+attr+']')){const active=b.getAttribute(attr)===value;b.classList.toggle('selected',active);b.setAttribute('aria-pressed',String(active))}for(const [id,on] of [['attendFilter',st.attend],['conflictFilter',st.conflict]]){const el=$(id);el.classList.toggle('active',on);el.setAttribute('aria-pressed',String(on))}const n=[st.track,st.priority,st.from,st.to,st.relative==='all'?'':st.relative,st.attend,st.conflict].filter(Boolean).length;$('filterCount').textContent=n?'('+n+')':'';const mine=st.sessions.filter(saved).length;$('mineCount').textContent=String(mine);document.querySelector('[data-tab="mine"]').setAttribute('aria-label',`Minha agenda: ${mine} ${mine===1?'sessão incluída':'sessões incluídas'}`)}
+function matches(s,conflicts){if(st.tab==='mine')return saved(s); // Minha agenda: always show both days, ignoring Programação filters.
+ if(s.day!==st.day)return false;if(st.attend&&!saved(s))return false;if(st.conflict&&!conflicts.has(s.id))return false;if(st.interest&&canonical(pref(s.id).interest)!==st.interest)return false;if(st.track&&s.track!==st.track)return false;if(st.priority&&(st.priority==='Sem'?!!pref(s.id).priority:pref(s.id).priority!==st.priority))return false;if(st.from&&s.end<=st.from||st.to&&s.start>=st.to)return false;if(!relativeMatch(s))return false;if(st.search&&!normalize([s.title,s.track,s.stage,s.speakers,...(s.participants||[]).flatMap(p=>[p.name,p.role,p.institution])].join(' ')).includes(normalize(st.search)))return false;return true}
+function updateControls(){for(const b of document.querySelectorAll('[data-tab]')){const active=b.dataset.tab===st.tab;b.classList.toggle('active',active);b.setAttribute('aria-selected',String(active))}for(const b of document.querySelectorAll('[data-day]')){const active=b.dataset.day===st.day;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))}for(const b of document.querySelectorAll('[data-view]')){const active=b.dataset.view===st.view;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))}const fields={interestFilter:st.interest,trackFilter:st.track,startFilter:st.from,endFilter:st.to};for(const [k,v] of Object.entries(fields))$(k).value=v;for(const [attr,value] of [['data-filter-priority',st.priority],['data-filter-now',st.relative]])for(const b of document.querySelectorAll('['+attr+']')){const active=b.getAttribute(attr)===value;b.classList.toggle('selected',active);b.setAttribute('aria-pressed',String(active))}for(const [id,on] of [['attendFilter',st.attend],['conflictFilter',st.conflict]]){const el=$(id);el.classList.toggle('active',on);el.setAttribute('aria-pressed',String(on))}const n=[st.track,st.priority,st.from,st.to,st.relative==='all'?'':st.relative,st.attend,st.conflict].filter(Boolean).length;$('filterCount').textContent=n?'('+n+')':'';const mine=st.sessions.filter(saved).length;const onMine=st.tab==='mine';document.querySelector('.day-picker').hidden=onMine;document.querySelector('.controls .search-field').hidden=onMine;document.querySelector('.controls .interest-field').hidden=onMine;$('advancedBtn').hidden=onMine;$('scopeNote').hidden=!onMine;$('mineCount').textContent=String(mine);document.querySelector('[data-tab="mine"]').setAttribute('aria-label',`Minha agenda: ${mine} ${mine===1?'sessão incluída':'sessões incluídas'}`)}
 function interestButtons(id,current,mode='list'){
- return STATES.filter(x=>x!=='Não analisado'||mode==='modal').map(value=>{
+ return STATES.map(value=>{
   const active=canonical(current)===value, cls=statusClass(value), action=mode==='modal'?'data-draft-interest':'data-quick-interest';
   return `<button type="button" class="interest-choice ${cls} ${active?'selected':''}" ${action}="${esc(value)}" ${mode==='list'?`data-session-id="${esc(id)}"`:''} aria-pressed="${active}" aria-label="${esc(interestLabel(value))}${active?' (selecionado)':''}"><span aria-hidden="true" class="check-mark">${active?'✓ ':''}</span>${esc(interestLabel(value))}</button>`;
  }).join('');
 }
 function listCard(s,conflicts){
  const p=pref(s.id),service=isService(s),status=service?'service':statusClass(p.interest),label=canonical(p.interest);
- const interest=service?'<span class="service-caption">Evento de serviço</span>':`<span class="pill ${status}">${esc(interestLabel(label))}</span>`;
+ const interest=service?'<span class="service-caption" title="Evento de serviço oficial" aria-label="Evento de serviço oficial">Gap</span>':`<span class="pill ${status}">${esc(interestLabel(label))}</span>`;
  const actions=service?'':`<div class="list-actions"><button class="secondary" data-open="${esc(s.id)}" type="button">Detalhes</button><button class="${saved(s)?'agenda-remove':'primary'}" data-toggle="${esc(s.id)}" aria-pressed="${saved(s)}" type="button">${saved(s)?'✓ Retirar da minha agenda':'+ Incluir na minha agenda'}</button>${conflicts.has(s.id)?'<span class="pill conflict-key">Conflito</span>':''}</div><div class="list-interest" role="group" aria-label="Interesse por esta sessão">${interestButtons(s.id,p.interest)}</div>`;
  return `<article class="list-card ${status} ${conflicts.has(s.id)&&!service?'conflict':''}"><div class="list-head"><div><p class="list-meta"><strong>${esc(s.start)}–${esc(s.end)}</strong> · ${esc(s.stage||s.track||'')}</p><h3>${esc(s.title)}</h3>${locationTrack(s).includes(' · ')?`<p class="muted">${esc(s.track||'')}</p>`:''}</div>${interest}</div>${actions}</article>`;
 }
-function grid(events,conflicts){if(!events.length)return '<div class="empty">Não há sessões para estes filtros neste dia.</div>';
- const min=Math.floor(Math.min(...events.map(s=>minutes(s.start)))/60)*60,max=Math.ceil(Math.max(...events.map(s=>minutes(s.end)))/60)*60,hour=window.innerWidth<=680?76:86,height=(max-min)/60*hour;
- const labels=[];for(let t=Math.ceil(min/60)*60;t<max;t+=60)labels.push(`<div class="hour" style="top:${(t-min)/60*hour}px">${String(Math.floor(t/60)).padStart(2,'0')}:00</div>`);
+function grid(events,conflicts,day){
+ const official=st.sessions.filter(s=>s.day===day);
+ const min=Math.min(480,...official.map(s=>Math.floor(minutes(s.start)/60)*60)),max=Math.max(1140,...official.map(s=>Math.ceil(minutes(s.end)/60)*60));
+ const hour=window.innerWidth<=680?76:86,height=(max-min)/60*hour;
+ // Never show the 08:00 label against the top border or 19:00 against the bottom.
+ const labels=[];for(let t=Math.ceil(min/60)*60;t<max;t+=60){if(t===min)continue;labels.push(`<div class="hour" style="top:${(t-min)/60*hour}px">${String(Math.floor(t/60)).padStart(2,'0')}:00</div>`)}
  const eventHtml=layoutDay(events).map(e=>{
   const v=e.event,w=100/e.lanes,top=(e.start-min)/60*hour,h=(e.end-e.start)/60*hour-2,service=isService(v),status=service?'service':statusClass(pref(v.id).interest);
   const attr=service?'role="note"':`type="button" data-open="${esc(v.id)}"`;
@@ -83,7 +87,20 @@ function grid(events,conflicts){if(!events.length)return '<div class="empty">Nã
  }).join('');
  return `<div class="calendar"><div class="calendar-main"><div class="hours" style="height:${height}px">${labels.join('')}</div><div class="day-track" style="--hour:${hour}px;height:${height}px">${eventHtml}</div></div><div class="calendar-hint">Toque em uma palestra para abrir detalhes. Eventos simultâneos ficam lado a lado; a borda vermelha sinaliza conflito entre escolhas.</div></div>`;
 }
-function render(){updateControls();const conflicts=conflictIds(st.sessions,st.prefs),events=st.sessions.filter(s=>matches(s,conflicts)).sort((a,b)=>a.start.localeCompare(b.start)||a.stage.localeCompare(b.stage));$('eventCount').textContent=`${events.length} ${events.length===1?'evento':'eventos'}`;$('conflictCount').textContent=events.some(s=>conflicts.has(s.id))?`${events.filter(s=>conflicts.has(s.id)).length} com conflito`:'';$('sessions').innerHTML=st.view==='grid'?grid(events,conflicts):`<div class="list">${events.length?events.map(s=>listCard(s,conflicts)).join(''):'<div class="empty">Não há sessões para estes filtros neste dia.</div>'}</div>`;persistUi()}
+function daySection(day,events,conflicts){
+ const name=day===DAYS[0]?'Quarta':'Quinta',id=`agenda-${day}`;
+ const list=`<div class="list">${events.length?events.map(s=>listCard(s,conflicts)).join(''):'<div class="empty">Nenhuma sessão incluída neste dia.</div>'}</div>`;
+ return `<section class="day-section" aria-labelledby="${id}"><h2 class="day-title" id="${id}">${name} <span class="day-total">${events.length} ${events.length===1?'sessão':'sessões'}</span></h2>${st.view==='grid'?grid(events,conflicts,day):list}</section>`;
+}
+function render(){
+ updateControls();const conflicts=conflictIds(st.sessions,st.prefs);
+ const events=st.sessions.filter(s=>matches(s,conflicts)).sort((a,b)=>a.day.localeCompare(b.day)||a.start.localeCompare(b.start)||a.stage.localeCompare(b.stage));
+ $('eventCount').textContent=st.tab==='mine'?`${events.length} ${events.length===1?'sessão incluída':'sessões incluídas'} nos dois dias`:`${events.length} ${events.length===1?'evento':'eventos'}`;
+ $('conflictCount').textContent=events.some(s=>conflicts.has(s.id))?`${events.filter(s=>conflicts.has(s.id)).length} com conflito`:'';
+ if(st.tab==='mine')$('sessions').innerHTML=DAYS.map(day=>daySection(day,events.filter(s=>s.day===day),conflicts)).join('');
+ else $('sessions').innerHTML=st.view==='grid'?grid(events,conflicts,st.day):`<div class="list">${events.length?events.map(s=>listCard(s,conflicts)).join(''):'<div class="empty">Não há sessões para estes filtros neste dia.</div>'}</div>`;
+ persistUi();
+}
 function locationTrack(s){const stage=String(s.stage||'').trim(),track=String(s.track||'').trim();const clean=value=>normalize(value).replace(/^(palco|sala|auditorio|trilha|local)\s*[-:–]\s*/,'').trim();return stage&&track&&clean(stage)===clean(track)?stage:[stage,track].filter(Boolean).join(' · ')||'Não informado';}
 function detailsHtml(s){
  const people=(s.participants||[]).map(p=>[p.name,p.role,p.institution].filter(Boolean).join(' · '));
@@ -96,22 +113,26 @@ function priorityButtons(current){return ['Essencial','Alta','Média','Baixa',''
  }).join('');
 }
 function modalEditor(s){
- const original=pref(s.id),draft=st.drafts.get(s.id)||original,legacy=original.interest&&LEGACY[original.interest]?`<p class="legacy">Classificação anterior: “${esc(original.interest)}”. O valor original permanece armazenado até você salvar uma mudança.</p>`:'';
+ const original=pref(s.id),draft={...original,...st.drafts.get(s.id)},legacy=original.interest&&LEGACY[original.interest]?`<p class="legacy">Classificação anterior: “${esc(original.interest)}”. O valor original permanece armazenado até você salvar uma mudança.</p>`:'';
  const attending=!!draft.attending;
- return `<form id="editForm"><section class="decision-area" aria-label="Suas decisões"><fieldset class="choice-field"><legend>Interesse</legend><div class="choice-row" role="group" aria-label="Interesse">${interestButtons(s.id,draft.interest,'modal')}</div><input type="hidden" name="interest" value="${esc(canonical(draft.interest))}"></fieldset>${legacy}<div class="agenda-decision"><button type="button" class="modal-attend ${attending?'selected agenda-remove':''}" data-draft-attend aria-pressed="${attending}">${attending?'✓ Retirar da minha agenda':'+ Incluir na minha agenda'}</button><input type="hidden" name="attending" value="${attending}"></div><fieldset class="choice-field"><legend>Prioridade</legend><div class="choice-row" role="group" aria-label="Prioridade">${priorityButtons(draft.priority)}</div><input type="hidden" name="priority" value="${esc(draft.priority||'')}"></fieldset></section>${detailsHtml(s)}<section class="text-decisions"><label>Comentários<textarea name="comment" maxlength="2000">${esc(draft.comment||'')}</textarea></label><label>Perguntas<textarea name="questions" maxlength="2000">${esc(draft.questions||'')}</textarea></label></section><div class="modal-actions"><button type="button" class="secondary" data-close="sessionModal">Fechar</button><button type="submit" class="primary">Salvar preferências</button></div><p class="save-message" id="saveMessage" role="status" aria-live="polite"></p></form>`;
+ return `<form id="editForm"><section class="decision-area" aria-label="Suas decisões"><fieldset class="choice-field"><legend>Interesse</legend><div class="choice-row" role="group" aria-label="Interesse">${interestButtons(s.id,draft.interest,'modal')}</div><input type="hidden" name="interest" value="${esc(canonical(draft.interest))}"></fieldset>${legacy}<div class="agenda-decision"><button type="button" class="modal-attend ${attending?'selected agenda-remove':''}" data-draft-attend aria-pressed="${attending}">${attending?'✓ Retirar da minha agenda':'+ Incluir na minha agenda'}</button><input type="hidden" name="attending" value="${attending}"></div><fieldset class="choice-field"><legend>Prioridade</legend><div class="choice-row" role="group" aria-label="Prioridade">${priorityButtons(draft.priority)}</div><input type="hidden" name="priority" value="${esc(draft.priority||'')}"></fieldset></section>${detailsHtml(s)}<section class="text-decisions"><label>Comentários<textarea name="comment" maxlength="2000">${esc(draft.comment||'')}</textarea></label><label>Perguntas<textarea name="questions" maxlength="2000">${esc(draft.questions||'')}</textarea></label></section><div class="modal-actions"><button type="button" class="secondary" data-close="sessionModal">Fechar</button><button type="submit" class="primary">Salvar</button></div><p class="save-message" id="saveMessage" role="status" aria-live="polite"></p></form>`;
 }
 function openSession(id){const s=st.sessions.find(x=>x.id===id);if(!s||isService(s))return;st.modalSession=id;$('modalTitle').textContent=s.title;$('modalContent').innerHTML=modalEditor(s);$('sessionModal').showModal();}
-function storeDraft(){const form=$('editForm');if(!form||!st.modalSession)return;
- const base=pref(st.modalSession),changed={interest:form.elements.interest.value,priority:form.elements.priority.value,attending:form.elements.attending.value==='true',comment:form.elements.comment.value,questions:form.elements.questions.value};
- const differs=Object.entries(changed).some(([key,value])=>{
-  const original=key==='interest'?canonical(base[key]):key==='attending'?!!base[key]:base[key]||'';
-  return value!==original;
- });
- if(differs)st.drafts.set(st.modalSession,{...base,...changed});else st.drafts.delete(st.modalSession);
+function storeDraft(){
+ const form=$('editForm');if(!form||!st.modalSession)return;
+ const base=pref(st.modalSession),fields=['priority','comment','questions'],changed={};
+ for(const field of fields){const value=form.elements[field].value;if(value!==(base[field]||''))changed[field]=value;}
+ if(Object.keys(changed).length)st.drafts.set(st.modalSession,changed);else st.drafts.delete(st.modalSession);
 }
 function setModalChoice(field,value){
  const form=$('editForm');if(!form)return;
- form.elements[field].value=value;
+ if(field==='interest'){
+  storeDraft();
+  if(!commitPrefs(st.modalSession,{interest:value})){$('saveMessage').textContent='Erro ao salvar o interesse. A seleção anterior foi mantida.';return;}
+  form.elements.interest.value=value;
+  $('saveMessage').textContent='Interesse salvo automaticamente neste navegador.';
+  render();
+ }else{form.elements[field].value=value;}
  const attr=field==='interest'?'data-draft-interest':'data-draft-priority';
  for(const button of form.querySelectorAll('['+attr+']')){
   const selected=button.getAttribute(attr)===value;button.classList.toggle('selected',selected);button.setAttribute('aria-pressed',String(selected));
@@ -119,7 +140,15 @@ function setModalChoice(field,value){
  }
  storeDraft();
 }
-function toggleModalAttend(){const form=$('editForm');if(!form)return;const current=form.elements.attending.value==='true',next=!current,b=form.querySelector('[data-draft-attend]');form.elements.attending.value=String(next);b.classList.toggle('selected',next);b.classList.toggle('agenda-remove',next);b.setAttribute('aria-pressed',String(next));b.textContent=next?'✓ Retirar da minha agenda':'+ Incluir na minha agenda';storeDraft();}
+function toggleModalAttend(){
+ const form=$('editForm');if(!form)return;
+ const next=form.elements.attending.value!=='true';storeDraft();
+ if(!commitPrefs(st.modalSession,{attending:next})){$('saveMessage').textContent='Erro ao salvar na agenda. A seleção anterior foi mantida.';return;}
+ form.elements.attending.value=String(next);
+ const b=form.querySelector('[data-draft-attend]');b.classList.toggle('selected',next);b.classList.toggle('agenda-remove',next);b.setAttribute('aria-pressed',String(next));b.textContent=next?'✓ Retirar da minha agenda':'+ Incluir na minha agenda';
+ $('saveMessage').textContent=next?'Inclusão salva automaticamente neste navegador.':'Retirada salva automaticamente neste navegador.';
+ render();storeDraft();
+}
 
 function exportBackup(){const keys={};for(let i=0;i<localStorage.length;i++){const key=localStorage.key(i);if(key&&/conahp/i.test(key)&&key!==SNAPSHOT_KEY)keys[key]=localStorage.getItem(key)}const data={kind:'CONAHP_FLORA_BACKUP',version:18,exportedAt:new Date().toISOString(),items:[...st.prefs.values()],legacyRaw:keys};const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=`conahp-flora-backup-${new Date().toISOString().slice(0,10)}.json`;document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
 async function loadBackup(file){st.importData=null;$('importBackup').disabled=true;if(!file)return;try{if(file.size>2000000)throw Error('Arquivo maior que 2 MB');const data=JSON.parse(await file.text());const items=validateImport(data);if(!items)throw Error('Nenhum registro reconhecido.');st.importData=items;$('importInfo').textContent=`${items.size} registros encontrados, ${[...items.keys()].filter(id=>st.prefs.has(id)).length} já existentes. O padrão preserva os existentes.`;$('importBackup').disabled=false}catch(error){$('importInfo').textContent='Arquivo inválido: '+error.message}}
@@ -155,6 +184,7 @@ function bind(){document.addEventListener('click',event=>{const b=event.target.c
  });
  $('modalContent').addEventListener('input',storeDraft);$('modalContent').addEventListener('change',storeDraft);
  $('modalContent').addEventListener('submit',event=>{event.preventDefault();const form=$('editForm');if(!form)return;storeDraft();const payload=st.drafts.get(st.modalSession);
+  if(!payload){$('saveMessage').textContent='Nenhuma alteração pendente. As decisões já foram salvas automaticamente.';return;}
   if(commitPrefs(st.modalSession,payload)){st.drafts.delete(st.modalSession);$('saveMessage').textContent='Salvo neste navegador';render()}
   else $('saveMessage').textContent='Erro ao salvar, dados não confirmados.';
  });

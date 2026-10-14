@@ -91,3 +91,9 @@ Para cada Issue exigir: SHA, mudanças implementadas, testes executados e result
 - Vercel deployment `dpl_CA7iFzunjZcFCKBjkDAk8DdzYLWm` READY, https://conahp-flora-2026-qszf63fjn-joao-moraes-projects-9bc51b2e.vercel.app/ ; 12 assets SHA1 conferidos, commit `cd017ab32f60979bffa19d8002eda346607215cc`.
 - Arquivos de aplicação alterados: `public/b18.js`, `public/b18.css`, `public/index.html`, `public/service-worker.js` (cache de ativos públicos). QA Chromium seis larguras/novos filtros/reload/backup PASS, GET localhost PASS, HTTP browser real/Android NOT_RUN. Pacote https://drive.google.com/file/d/12jlQLnrchB5mYBSK6LmPInyWFvlkLw9I/view SHA256 `fa1b4fcfb48d624efd55aa45d3f8c607e8afb8bf936851320d3a110a36c492ed`.
 - Alias estável permanece na B17 `dpl_AU2bxMsMMbThebHSYnZ2VdbFJk57`. Nenhuma promoção. Status `B18_H_READY_FOR_OWNER_QA`; conferir localStorage distinto por URL, exportar/importar backup.
+
+
+### B18-I - Minha agenda global e salvamento imediato, 2026-10-14
+- Base B18-H `a5534cc225e832e06c91bc92c125abac7cc5745a`; Minha agenda soma e mostra ambos os dias (2+1), oculta filtros da Programação e mantém escala 08-19 por dia. Autosave de interesse/attending no modal e Lista, Sem prioridade/textos apenas no botão Salvar; Gap nos serviços da Lista, Não analisado na Lista.
+- QA Chromium 6 larguras, 2+1, filtros, autosave, reload/legados/backup e falha de storage PASS; regressões B18..B18-H PASS, Python HTTP local 12/12 PASS. Android físico e HTTPS externo NOT_RUN.
+- ZIP SHA256 `2fc10598196b2b2ed997e1d0593ad7b6ad59addc81c6508445720859bece601c` em anexo no chat. Preview/ID registrados na Issue #3 após deploy; produção B17 inalterada. Status alvo `B18_I_READY_FOR_OWNER_QA`.

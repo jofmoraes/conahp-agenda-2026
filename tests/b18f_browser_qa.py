@@ -84,8 +84,8 @@ with sync_playwright() as p:
    page.locator('[data-draft-priority="Essencial"]').click()
    page.fill('textarea[name="comment"]','Comentário persistente B18-F')
    page.fill('textarea[name="questions"]','Pergunta persistente B18-F')
-   assert page.evaluate("(id)=>JSON.parse(localStorage.getItem('conahp2026:flora:preferences:b18')).items.find(v=>v.sessionId===id)",id)['interest']=='Talvez','draft must be unsaved'
-   # Close/backdrop retains edited draft until explicit save.
+   assert page.evaluate("(id)=>JSON.parse(localStorage.getItem('conahp2026:flora:preferences:b18')).items.find(v=>v.sessionId===id)",id)['interest']=='Não analisado','interest decision must already be saved'
+   # Close/backdrop retains priority and text draft; interest is already saved.
    page.keyboard.press('Escape');assert not page.locator('#sessionModal').evaluate('(e)=>e.open')
    page.locator(f'[data-open="{id}"]').first.click()
    assert page.locator('[data-draft-interest="Não analisado"]').get_attribute('aria-pressed')=='true'

@@ -43,7 +43,7 @@ with sync_playwright() as p:
  assert second.locator('#editForm textarea[name="questions"]').input_value()=='Nova questão B18'
  assert second.locator('#editForm textarea[name="comment"]').input_value()=='Histórico protegido'
  second.click('[data-close="sessionModal"]')
- second.click('[data-day="2026-10-15"]')
+ second.click('[data-tab="program"]');second.click('[data-day="2026-10-15"]')
  s3=second.evaluate('JSON.parse(JSON.stringify(window.__db))')
  second.close()
  third=run_page(s3)
