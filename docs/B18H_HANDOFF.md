@@ -38,3 +38,15 @@ Data: 2026-10-14 (BRT). Base: `feat/b18-flora-ux`, B18-G HEAD `5462346126b07315b
 - Nenhum Codex, PowerShell Windows, PR, Code Review, agente paralelo, Cloudflare, Apps Script, Sheets, RIW, GSH, JFM, login, API remota ou Blob criado.
 
 **Gate:** B18-H candidata pendente de preview Vercel READY e QA real do proprietário. Status final solicitado: `B18_H_READY_FOR_OWNER_QA`, apenas após implantação e verificação da preview.
+
+
+## B18-H Preview Vercel confirmada
+
+- Preview Vercel B18-H: **https://conahp-flora-2026-qszf63fjn-joao-moraes-projects-9bc51b2e.vercel.app/**, deployment **`dpl_CA7iFzunjZcFCKBjkDAk8DdzYLWm`** `READY` no projeto `prj_WUBhR8G0dDeyvESLAOc1jB3L5OwU` (ambiente preview, target `null`, sem aliases).
+- Commit funcional no GitHub: **`cd017ab32f60979bffa19d8002eda346607215cc`** na branch `feat/b18-flora-ux` (sem PR/main).
+- Vercel readback de 12 assets e SHA-1 exatamente iguais ao código testado: `b18.css=da88f3b27666107abb5ebafc44af545b1ddc3db8`, `b18.js=326df62ee83d384db7b48ba06295b0794d8f79a6`, `index.html=314a49d50b2c6f4c54efc5e51a48035e912c7757`, `service-worker.js=9f5f4c7fb074a3864914e9f22b138d81bc47e662`. Schedule/ícones/manifest hashes imutáveis B18-G.
+- Alias Vercel de produção conferido novamente: `https://conahp-flora-2026.vercel.app` segue **B17 `dpl_AU2bxMsMMbThebHSYnZ2VdbFJk57`**. B18-G antiga continua acessível pela própria URL.
+- Pacote auditável final ZIP, SHA-256 **`fa1b4fcfb48d624efd55aa45d3f8c607e8afb8bf936851320d3a110a36c492ed`**: https://drive.google.com/file/d/12jlQLnrchB5mYBSK6LmPInyWFvlkLw9I/view . Contém ativos públicos, fontes, testes legados atualizados, teste B18-H, documentação e SHA256SUMS.txt. Teste de integridade ZIP CRC PASS.
+- Testes DOM Chromium e HTTP GET localhost executados **PASS**, sem falhas remanescentes. Browser real Vercel, Android físico, splash nativa PWA, dados reais da Flora **NOT_RUN**, QA pelo proprietário ainda obrigatória.
+
+**Gate final: `B18_H_READY_FOR_OWNER_QA`**. Nova preview não compartilha localStorage com URLs anteriores: exportar backup na origem que contém os dados e importar na B18-H para comparar registros reais. Nenhuma autorização para promover a produção foi emitida; rollback pelo deployment B17 sem limpar localStorage.
