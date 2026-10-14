@@ -208,3 +208,9 @@ html.app-loaded,body.app-loaded{background:#f3f7f8}
 .list-actions .agenda-remove:focus-visible,.modal-attend.selected.agenda-remove:focus-visible{outline:3px solid #29a9c6;outline-offset:2px}
 .modal-attend{border-radius:9px}
 @media(max-width:360px){.list-interest{gap:3px}.list-interest .interest-choice{font-size:11px;padding:5px 5px}}
+
+/* B18-J contextual button: white without filters; medium blue when filters can be cleared. */
+#backupBtn.clear-filters-active{background:#347494!important;border:1px solid #347494!important;color:#fff!important;box-shadow:none!important}
+#backupBtn.clear-filters-active:hover{background:#286783!important}
+#backupBtn.clear-filters-inactive{background:#fff!important;border:1px solid #afc4cd!important;color:#073b5c!important;box-shadow:none!important}
+[hidden]{display:none!important}
