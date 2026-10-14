@@ -46,7 +46,7 @@ with sync_playwright() as p:
    assert page.locator('.event').count()==1
    page.click('[data-tab="program"]')
    page.click('#advancedBtn');assert page.locator('#filterModal[open]').count()==1
-   page.select_option('#nowFilter','past')
+   page.click('[data-filter-now="past"]')
    page.keyboard.press('Escape');assert page.locator('#filterModal[open]').count()==0
    page.click('#backupBtn');page.wait_for_selector('#backupModal[open]')
    with page.expect_download() as dl:page.click('#exportBackup')
@@ -54,7 +54,7 @@ with sync_playwright() as p:
    page.click('[data-close="backupModal"]')
   page.click('[data-view="grid"]');page.click('[data-tab="program"]');page.click('[data-day="2026-10-14"]')
   if width==390:
-   page.click('#advancedBtn');page.select_option('#nowFilter','all');page.click('[data-close="filterModal"]')
+   page.click('#advancedBtn');page.click('[data-filter-now="all"]');page.click('[data-close="filterModal"]')
   spans=page.evaluate("""() => [...document.querySelectorAll('.event')].map(x=>[x.style.left,x.style.width])""")
   assert any('50%' in x or '33.333' in x for pair in spans for x in pair),(width,'no parallel lanes',spans)
   assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'),(width,'scroll after grid')

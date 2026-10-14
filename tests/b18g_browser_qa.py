@@ -35,7 +35,7 @@ with sync_playwright() as p:
   assert page.locator('[data-day]').all_inner_texts()==['Quarta','Quinta']
   assert page.locator('[data-day="2026-10-14"]').evaluate('(e)=>parseFloat(getComputedStyle(e).fontSize)')>=14.5
   assert page.locator('.key.status-alto-interesse').inner_text()=='Interesse'
-  assert page.locator('.key.service-key').inner_text()=='Evento de serviço'
+  assert page.locator('.key.service-key').inner_text()=='Gap'
   legend=page.locator('.legend-states .key').evaluate_all('(e)=>e.map(x=>({x:x.getBoundingClientRect().x,y:x.getBoundingClientRect().y,r:x.getBoundingClientRect().right}))')
   assert max(a['y'] for a in legend)-min(a['y'] for a in legend)<2,('legend multiline',w,legend)
   assert max(a['r'] for a in legend)<w,('legend overflow',w,legend)
@@ -61,8 +61,8 @@ with sync_playwright() as p:
   assert page.locator('#filterModal[open]').count()==1
   assert page.locator('#attendFilter[type="checkbox"]').count()==0
   assert page.locator('#conflictFilter[type="checkbox"]').count()==0
-  assert page.locator('#priorityFilter').locator('xpath=..').inner_text().startswith('Prioridade')
-  assert page.locator('#nowFilter').locator('xpath=..').inner_text().startswith('Em relação a agora')
+  assert page.locator('[data-filter-priority]').count()==6
+  assert page.locator('[data-filter-now]').count()==4
   page.click('#attendFilter');assert page.locator('#attendFilter').get_attribute('aria-pressed')=='true'
   page.click('#attendFilter');assert page.locator('#attendFilter').get_attribute('aria-pressed')=='false'
   page.click('#conflictFilter');assert page.locator('#conflictFilter').get_attribute('aria-pressed')=='true'
@@ -82,7 +82,7 @@ with sync_playwright() as p:
    page.locator(f'[data-toggle="{sid}"]').click()
    page.locator(f'[data-open="{sid}"]').first.click()
    assert page.locator('.modal-attend').get_attribute('aria-pressed')=='true'
-   assert page.locator('.modal-attend').evaluate('(e)=>getComputedStyle(e).backgroundColor')=='rgb(237, 244, 248)'
+   assert page.locator('.modal-attend').evaluate('(e)=>getComputedStyle(e).backgroundColor')in ('rgb(215, 234, 243)','rgb(201, 227, 238)')
    assert page.locator('[data-draft-priority]').all_inner_texts()[0].endswith('Essencial')
    page.locator('[data-draft-priority="Alta"]').click()
    page.locator('textarea[name="comment"]').fill('Comentário B18-G preservado')

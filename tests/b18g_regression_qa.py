@@ -113,8 +113,8 @@ with sync_playwright() as p:
    page.wait_for_function('!document.querySelector("#importBackup").disabled');page.click('#importBackup')
    assert id in page.evaluate("JSON.parse(localStorage.getItem('conahp2026:flora:preferences:b18')).items.map(x=>x.sessionId)")
    page.click('[data-close="backupModal"]')
-   page.fill('#search','hospital');page.select_option('#interestFilter','Talvez');page.click('#advancedBtn');page.select_option('#nowFilter','past');page.click('#resetFilters')
-   assert page.locator('#nowFilter').input_value()=='all' and page.locator('#search').input_value()=='' and page.locator('#interestFilter').input_value()==''
+   page.fill('#search','hospital');page.select_option('#interestFilter','Talvez');page.click('#advancedBtn');page.click('[data-filter-now="past"]');page.click('#resetFilters')
+   assert page.locator('[data-filter-now="all"]').get_attribute('aria-pressed')=='true' and page.locator('#search').input_value()=='' and page.locator('#interestFilter').input_value()==''
    assert page.locator('[data-view="list"].active').count()==1
    assert page.locator('[data-day="2026-10-14"].active').count()==1
    page.click('[data-close="filterModal"]')

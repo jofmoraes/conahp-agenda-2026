@@ -78,3 +78,10 @@ Para cada Issue exigir: SHA, mudanças implementadas, testes executados e result
 - Preview: https://conahp-flora-2026-2bril2m9p-joao-moraes-projects-9bc51b2e.vercel.app ; deployment `dpl_7mmy6qaoeESWouBhZGNpZy5r4Ar8` READY, 12 assets conferidos byte/hash na candidata.
 - Branch commit `f0469c7c51fd5f07e8f49dee43b9f84954088652`, pacote SHA-256 `9b9b4ad136d9295a76b4980991548001314b322c8fecccb5616e2a4bae4c9123`, Drive https://drive.google.com/file/d/1q35JVK1NfeK0YGgvt7IORHbjSmSzv7CV/view.
 - B17 alias principal `dpl_AU2bxMsMMbThebHSYnZ2VdbFJk57` preservado, nenhum deploy promovido. Testes locais Chromium PASS e HTTP local externo NOT_RUN por bloqueio do ambiente. Status `B18_G_READY_FOR_OWNER_QA` para avaliação da Flora.
+
+
+### B18-H, 2026-10-14 BRT, preview em homologação
+- Base B18-G `5462346126b07315b85a46b1704cb26cb2359a80`; UX de contador Minha agenda, legenda Gap em linha, cartões de serviço com borda clara, título acima de palco em grade 3 colunas às 12h, filtros avançados por botões com Todos distinto de Sem, botão ✓ Retirar azul-claro e loading natural B18-G preservado.
+- Arquivos alterados apenas `public/index.html`, `public/b18.js`, `public/b18.css`, `public/service-worker.js` (cache público), testes de regressão, `docs/B18H_HANDOFF.md` e este ledger. Imutáveis: 32 sessões, `schedule.json`, `schedule-utils.js`, logo, manifest, quatro PNG PWA, persistência e backup.
+- Chromium DOM QA 320/360/390/412/768/1280 PASS, regressão B18-E/F/G PASS, backup export/import e legacy reload PASS; HTTP GET localhost via urllib PASS (7 assets), HTTP browser Vercel/Android real NOT_RUN. Contraste evento serviço 6,23:1; botão retirada 8,14:1. Não declarar smoke externo.
+- Pacote auditável SHA-256 `fa1b4fcfb48d624efd55aa45d3f8c607e8afb8bf936851320d3a110a36c492ed`, https://drive.google.com/file/d/12jlQLnrchB5mYBSK6LmPInyWFvlkLw9I/view . Após deploy, URL/ID/commit/status serão registrados na Issue #3. Nunca promover automaticamente URL estável B17 `dpl_AU2bxMsMMbThebHSYnZ2VdbFJk57`. Próximo gate é QA do proprietário na preview e migração manual por backup devido a origens distintas.

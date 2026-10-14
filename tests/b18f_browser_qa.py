@@ -24,7 +24,7 @@ with sync_playwright() as p:
   assert page.locator('.event:not(.service)').count()>0
   assert page.locator('.event.service').count()>0
   assert page.locator('.event.service[data-open]').count()==0,('service clickable',width)
-  assert page.locator('.event.service').first.evaluate('(e)=>getComputedStyle(e).backgroundImage.includes("repeating-linear-gradient")'),('service hatch',width)
+  assert page.locator('.event.service').first.evaluate('(e)=>getComputedStyle(e).backgroundImage === "none"'),('service hatch',width)
   boas=page.locator('.event.service').filter(has_text='Boas-vindas');assert boas.count()==1
   a=boas.evaluate('(e)=>({h:e.clientHeight,sh:e.scrollHeight,time:getComputedStyle(e.querySelector(".event-time")).fontSize,title:getComputedStyle(e.querySelector("strong")).fontSize})')
   assert a['h']>=34 and a['h']>=a['sh'],('Boas-vindas clipping',width,a)
@@ -113,8 +113,8 @@ with sync_playwright() as p:
    page.wait_for_function('!document.querySelector("#importBackup").disabled');page.click('#importBackup')
    assert id in page.evaluate("JSON.parse(localStorage.getItem('conahp2026:flora:preferences:b18')).items.map(x=>x.sessionId)")
    page.click('[data-close="backupModal"]')
-   page.fill('#search','hospital');page.select_option('#interestFilter','Talvez');page.click('#advancedBtn');page.select_option('#nowFilter','past');page.click('#resetFilters')
-   assert page.locator('#nowFilter').input_value()=='all' and page.locator('#search').input_value()=='' and page.locator('#interestFilter').input_value()==''
+   page.fill('#search','hospital');page.select_option('#interestFilter','Talvez');page.click('#advancedBtn');page.click('[data-filter-now="past"]');page.click('#resetFilters')
+   assert page.locator('[data-filter-now="all"]').get_attribute('aria-pressed')=='true' and page.locator('#search').input_value()=='' and page.locator('#interestFilter').input_value()==''
    assert page.locator('[data-view="list"].active').count()==1
    assert page.locator('[data-day="2026-10-14"].active').count()==1
    page.click('[data-close="filterModal"]')

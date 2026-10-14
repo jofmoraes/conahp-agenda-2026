@@ -148,3 +148,48 @@
 @media(prefers-reduced-motion:reduce){.loading-spinner{animation:none}}
 
 html.app-loaded,body.app-loaded{background:#f3f7f8}
+
+/* B18-H: changes limited to tab count, compact legend, service tone, grid hierarchy,
+   filter segments, and matching attendance affordances. */
+.tabs [data-tab="mine"]{display:inline-flex;align-items:center;justify-content:center;gap:10px;position:relative}
+.mine-badge{display:inline-flex;align-items:center;justify-content:center;flex:0 0 23px;width:23px;height:23px;border-radius:50%;font-size:12px;line-height:1;font-weight:850;color:var(--navy);background:#e5f1f6;border:1px solid #aac6d5;font-variant-numeric:tabular-nums}
+.tabs [data-tab="mine"].active .mine-badge{background:#fff;color:var(--navy);border-color:#fff}
+.legend{flex-direction:row;align-items:center;flex-wrap:nowrap;gap:4px;width:100%;overflow:visible}
+.legend-states,.legend-extras{width:auto;max-width:none;flex-wrap:nowrap;gap:3px;flex:0 0 auto}
+.legend-states .key,.legend-extras .key{white-space:nowrap;font-size:11px;line-height:1.3;padding:3px 4px;border-radius:4px}
+.legend .legend-short{display:none}
+/* Gap is presentation-only: official sessions remain unchanged. */
+.event.service{background:#f8fafb!important;color:#49616e!important;border:1px solid #c8d4da!important;border-left:5px solid #fff!important;box-shadow:inset 0 0 0 1px #dde5e9;}
+.list-card.service{background:#f8fafb!important;color:#49616e!important;border:1px solid #c8d4da!important;border-left:6px solid #fff!important;box-shadow:inset 0 0 0 1px #dde5e9}
+.event.event-compact .event-track{display:none!important}
+.event.event-compact strong{flex:0 1 auto;-webkit-line-clamp:7}
+.list-actions .agenda-remove,.modal-attend.selected.agenda-remove{background:#d7eaf3!important;color:#174660!important;border-color:#8db8cb!important;box-shadow:inset 0 0 0 1px #c3dce8!important;font-weight:800}
+.list-actions .agenda-remove:hover,.modal-attend.selected.agenda-remove:hover{background:#c9e3ee!important;color:#123f5a!important}
+.filter-choice-field{border:0;padding:0;margin:12px 0;min-width:0}
+.filter-choice-field legend{font-size:14px;font-weight:800;margin:0 0 7px;padding:0}
+.filter-segments{display:flex;flex-wrap:nowrap;gap:5px;max-width:100%;min-width:0}
+.filter-segments button{flex:1 1 0;min-width:0;min-height:35px;padding:6px 5px;border:1.5px solid #a7bdc9;border-radius:6px;background:#f2f7fa;color:#17435c;font-size:12px;font-weight:750;line-height:1.15;white-space:nowrap}
+.filter-segments button.selected{background:#347297;color:#fff;border-color:#276486;box-shadow:inset 0 0 0 1px #fff}
+.filter-segments button:hover:not(.selected){background:#e4f2f7}
+@media(max-width:680px){
+ .tabs [data-tab="mine"]{gap:7px}
+ .legend{gap:3px}
+ .legend-states,.legend-extras{gap:2px}
+ .legend-states .key,.legend-extras .key{font-size:10.5px;padding:3px 3px}
+ .filter-segments button{font-size:11.5px;padding:6px 3px}
+}
+@media(max-width:360px){
+ .tabs [data-tab="mine"]{gap:5px}
+ .mine-badge{width:21px;height:21px;flex-basis:21px;font-size:11.5px}
+ .legend .legend-full{display:none}
+ .legend .legend-short{display:inline}
+ .legend-states .key,.legend-extras .key{font-size:10.5px;padding:3px 3px}
+ .filter-segments button{font-size:11px;padding:6px 2px;letter-spacing:-.02em}
+}
+@media(min-width:341px) and (max-width:360px){.legend .legend-full{display:inline}.legend .legend-short{display:none}}
+
+/* Badge follows the right edge of the tab without shrinking its label. */
+.tabs [data-tab="mine"]{display:grid;grid-template-columns:minmax(0,1fr) 23px;gap:6px;align-items:center}
+.tabs [data-tab="mine"] .mine-label{min-width:0;text-align:center;white-space:nowrap}
+@media(max-width:360px){.tabs [data-tab="mine"]{grid-template-columns:minmax(0,1fr) 21px;gap:4px}}
+@media(max-width:680px){.legend-states .key,.legend-extras .key{font-size:11px}}
