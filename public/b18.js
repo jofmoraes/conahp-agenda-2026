@@ -23,9 +23,9 @@ function collect(obj,out,depth=0){if(depth>5||!obj||typeof obj!=='object')return
  for(const [key,val] of Object.entries(obj)){if(validId(key)&&val&&typeof val==='object'){out.set(key,{...val,sessionId:key})}else if(['items','preferences','prefs','records','data','state','sessions','values','flora'].includes(key))collect(val,out,depth+1)}
 }
 function getUi(){const raw=parseJson(localStorage.getItem(UI_KEY));if(!raw||typeof raw!=='object')return;
- st.day=DAYS.includes(raw.day)?raw.day:st.day;st.view=['grid','list'].includes(raw.view)?raw.view:'grid';st.track=raw.track||'';st.priority=raw.priority||'';st.from=raw.timeFrom||'';st.to=raw.timeTo||'';st.conflict=raw.conflictsOnly===true;
+ st.day=DAYS.includes(raw.day)?raw.day:st.day;st.view=['grid','list'].includes(raw.b18ViewChoice)?raw.b18ViewChoice:'grid';st.track=raw.track||'';st.priority=raw.priority||'';st.from=raw.timeFrom||'';st.to=raw.timeTo||'';st.conflict=raw.conflictsOnly===true;
 }
-function persistUi(){try{const old=parseJson(localStorage.getItem(UI_KEY))||{};localStorage.setItem(UI_KEY,JSON.stringify({...old,day:st.day,view:st.view,track:st.track,priority:st.priority,timeFrom:st.from,timeTo:st.to,conflictsOnly:st.conflict}))}catch{warnStorage()}}
+function persistUi(){try{const old=parseJson(localStorage.getItem(UI_KEY))||{};localStorage.setItem(UI_KEY,JSON.stringify({...old,day:st.day,view:st.view,b18ViewChoice:st.view,track:st.track,priority:st.priority,timeFrom:st.from,timeTo:st.to,conflictsOnly:st.conflict}))}catch{warnStorage()}}
 function warnStorage() {st.storageOk=false;note('Armazenamento indisponível: alterações podem não persistir. Faça backup e libere espaço.');}
 function note(text){$('notice').textContent=text||'';}
 function loadPrefs(){const legacy=[],sources={},b18= parseJson(localStorage.getItem(PREF_KEY));for(let i=0;i<localStorage.length;i++){const key=localStorage.key(i);if(!key||!(/conahp/i.test(key))||[PREF_KEY,UI_KEY,SNAPSHOT_KEY].includes(key)||/filter|cache|draft|theme/i.test(key))continue;
