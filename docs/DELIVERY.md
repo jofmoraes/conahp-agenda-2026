@@ -33,3 +33,10 @@ Para cada Issue exigir: SHA, mudanças implementadas, testes executados e result
 ## Histórico e aprendizado
 - 2026-10-09: metodologia importada seletivamente do GSH. Um orquestrador + um executor; missões completas; estado durável no GitHub; sem PR; análise de gatilhos de deploy; testes proporcionais.
 - Próximo passo: ativação manual da Missão 1 após publicação das Issues.
+
+
+## 2026-10-14 - B18-E GPT Web
+
+- Projeto público Flora em Vercel confirmado: `prj_WUBhR8G0dDeyvESLAOc1jB3L5OwU`, B17 pré-existente `dpl_AU2bxMsMMbThebHSYnZ2VdbFJk57`, sem vínculo Git/CI, persistência apenas no navegador do proprietário.
+- B18 implementado em `feat/b18-flora-ux`, sem merge/PR/Codex; ZIP `f1ff3cc05504b59857090fa099ac0a5b5cd953be3bac97f183c1a540bc9a44b8` armazenado no Drive conforme docs/B18_HANDOFF.md.
+- Testes locais DOM Chromium seis larguras PASS, 32 sessões oficiais/110 participantes/21 conflitos PASS; pendente validação HTTPS/usuária no mesmo domínio, chave legada específica e PWA real. Nenhuma alteração em Cloudflare, Apps Script ou Sheets, backend remoto não disponível. Status: B18_CANDIDATE_READY_FOR_EXTERNAL_QA.
