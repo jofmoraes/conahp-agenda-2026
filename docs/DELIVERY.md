@@ -97,3 +97,8 @@ Para cada Issue exigir: SHA, mudanças implementadas, testes executados e result
 - Base B18-H `a5534cc225e832e06c91bc92c125abac7cc5745a`; Minha agenda soma e mostra ambos os dias (2+1), oculta filtros da Programação e mantém escala 08-19 por dia. Autosave de interesse/attending no modal e Lista, Sem prioridade/textos apenas no botão Salvar; Gap nos serviços da Lista, Não analisado na Lista.
 - QA Chromium 6 larguras, 2+1, filtros, autosave, reload/legados/backup e falha de storage PASS; regressões B18..B18-H PASS, Python HTTP local 12/12 PASS. Android físico e HTTPS externo NOT_RUN.
 - ZIP SHA256 `2fc10598196b2b2ed997e1d0593ad7b6ad59addc81c6508445720859bece601c` em anexo no chat. Preview/ID registrados na Issue #3 após deploy; produção B17 inalterada. Status alvo `B18_I_READY_FOR_OWNER_QA`.
+
+
+### B18-I deployment de preview confirmado
+- https://conahp-flora-2026-fa340fetj-joao-moraes-projects-9bc51b2e.vercel.app/ , `dpl_FiMVS8NfSGECKbZaUEjpi5D9UByd` READY, 12 assets com hashes conferidos. Produção permanece B17 `dpl_AU2bxMsMMbThebHSYnZ2VdbFJk57`.
+- QA local 6 larguras e regressões antigas PASS; Android e HTTP real NOT_RUN. Código `23cd904b7bea5049d62899bff40ae234f6e097e3`; ZIP SHA-256 `2fc10598196b2b2ed997e1d0593ad7b6ad59addc81c6508445720859bece601c`, pacote na thread GPT Web. Status `B18_I_READY_FOR_OWNER_QA`.
