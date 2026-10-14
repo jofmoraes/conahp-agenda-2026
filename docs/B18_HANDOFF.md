@@ -21,3 +21,8 @@ Chave B18: `conahp2026:flora:preferences:b18`; UI mantém a chave B17 `conahp202
 ## Futuro servidor
 
 Vercel Blob 403 sem alteração de permissão, não repetir. Sheets via API do servidor Vercel, segredos apenas em ambiente, autorização por gravação/leitura e testes entre dispositivos, depende de autorização específica. Nenhuma alteração no RIW, Sheets, Cloudflare ou Apps Script.
+
+
+## Correção e regressão B18-E
+
+Na primeira abertura B18 deve usar **Agenda** mesmo quando o B17 antigo persistia `view=list` automaticamente por padrão. A preferência explícita nova usa `b18ViewChoice` dentro da chave UI existente; após o usuário escolher Lista ou Agenda, a escolha se mantém em reload. Teste de recarga sintética em Chromium confirmou que `Interesse` antigo permanece intocado no armazenamento original, mapeamento visual `Talvez` não vira escolha automática, comentários/perguntas/intenção persistem na chave B18 e dia/visualização mantêm a última escolha. Não equivale à verificação com os dados B17 reais da Flora.
