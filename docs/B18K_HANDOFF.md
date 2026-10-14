@@ -30,3 +30,13 @@ Referências técnicas: https://web.dev/learn/pwa/web-app-manifest/ ; https://de
 Publicar B18-K apenas como *preview* Vercel `prj_WUBhR8G0dDeyvESLAOc1jB3L5OwU`, sem alias estável. Produção mantém B18-J `dpl_HdVB9FKzCLFUnYwwuU9d7LHpkCtW`. Em eventual problema, basta manter/reassociar alias a esse deployment; não excluir localStorage nem caches da usuária. A preview tem hostname/localStorage próprio. O proprietário precisa comparar a tela HTML em navegador comum e ícone instalado, sabendo que a splash nativa anterior à primeira pintura **não é controlável pelo HTML**.
 
 **Status: `B18_K_SPLASH_READY_FOR_OWNER_QA` significa candidata pronta para teste, não prova de splash nativa customizada.**
+## Verificação da preview B18-K (Vercel API)
+
+- **Preview READY**: https://conahp-flora-2026-3k3h87t7v-joao-moraes-projects-9bc51b2e.vercel.app/ ; ID `dpl_EJSkM3i2HZxczTicwtcEtG9jPCXi`. `target=null` e `alias=[]`.
+- Commit funcional `242fe87614a874c1254a98dc181437788d7fb00b` em `feat/b18-flora-ux`. A listagem de arquivos foi comparada diretamente à versão B18-J estável, **11/12 hashes SHA-1 idênticos**. **Único ativo alterado `index.html`**, de `f5d9ecf52bc6405da6e899f356ca8964676e44ca` para `a3e38d5802b0f4577902a328731e3bb873f89df6`. O resultado também confirmou imutabilidade de `b18.css`, `b18.js`, `service-worker.js`, manifesto, 4 PNG, logo, `schedule.json` e `schedule-utils.js`.
+- `get_alias(conahp-flora-2026.vercel.app)` após deploy continua apontando para B18-J `dpl_HdVB9FKzCLFUnYwwuU9d7LHpkCtW`. **Não houve promoção.**
+- **QA executado**: Chromium DOM (320, 360, 390, 412, 768, 1280; com/sem CSS externo), reduced motion e ocultação natural da loading: PASS. Preservação de SHA1 dos dados estáticos B18-J: PASS; nova preview READY, 12 hashes comparados: PASS. Navegação real HTTPS, cache frio/quente do Service Worker e splash nativa Android/iOS: NOT_RUN (navegador bloqueado por administrador). Não declarar correção da splash nativa.
+- O texto pode não ser percebido se HTML e dados carregarem muito rápido. Isso é **esperado**: nenhuma espera artificial foi introduzida para prolongá-lo. A splash anterior ao HTML pode continuar exibindo somente o ícone/círculo do dispositivo.
+- **Rollback imediato, se algum dia for necessário**: manter/reassociar `conahp-flora-2026.vercel.app` ao release B18-J `dpl_HdVB9FKzCLFUnYwwuU9d7LHpkCtW`, sem apagar localStorage, caches da usuária ou ícone instalado. Nesta missão, essa reversão nem é necessária porque B18-J nunca foi alterada.
+
+**Status de engenharia: `B18_K_SPLASH_READY_FOR_OWNER_QA`, homologação do proprietário pendente.**
