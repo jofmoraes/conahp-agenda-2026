@@ -72,3 +72,9 @@ Para cada Issue exigir: SHA, mudanças implementadas, testes executados e result
 - QA **PASS** `node --check public/b18.js`, `tests/b18_browser_qa.py`, `tests/b18_reload_qa.py`, `tests/b18g_regression_qa.py`, `tests/b18g_browser_qa.py`: seis larguras e interface, controles, persistência, formato do estado interno, priorização, loading e arquivos oficiais. **NOT_RUN/BLOCKED_EXTERNAL:** smoke HTTP local Chromium por `ERR_BLOCKED_BY_ADMINISTRATOR`, HTTP Vercel e Android físico não executados nesta etapa; sem falsas alegações de sincronização.
 - Artefato auditável SHA-256 `9b9b4ad136d9295a76b4980991548001314b322c8fecccb5616e2a4bae4c9123`, Google Drive https://drive.google.com/file/d/1q35JVK1NfeK0YGgvt7IORHbjSmSzv7CV/view. `docs/B18G_HANDOFF.md` descreve o delta. Preview Vercel e identidade do deployment registrados depois da criação na Issue #3.
 - Preservado deployment B17 original `dpl_AU2bxMsMMbThebHSYnZ2VdbFJk57` no alias principal. Próximo gate: proprietário avaliar preview com backup da origem real, aprovar explicitamente antes de qualquer promoção. Status `B18_G_READY_FOR_OWNER_QA` condicionado a deploy READY.
+
+
+### B18-G preview Vercel READY - 2026-10-14
+- Preview: https://conahp-flora-2026-2bril2m9p-joao-moraes-projects-9bc51b2e.vercel.app ; deployment `dpl_7mmy6qaoeESWouBhZGNpZy5r4Ar8` READY, 12 assets conferidos byte/hash na candidata.
+- Branch commit `f0469c7c51fd5f07e8f49dee43b9f84954088652`, pacote SHA-256 `9b9b4ad136d9295a76b4980991548001314b322c8fecccb5616e2a4bae4c9123`, Drive https://drive.google.com/file/d/1q35JVK1NfeK0YGgvt7IORHbjSmSzv7CV/view.
+- B17 alias principal `dpl_AU2bxMsMMbThebHSYnZ2VdbFJk57` preservado, nenhum deploy promovido. Testes locais Chromium PASS e HTTP local externo NOT_RUN por bloqueio do ambiente. Status `B18_G_READY_FOR_OWNER_QA` para avaliação da Flora.
