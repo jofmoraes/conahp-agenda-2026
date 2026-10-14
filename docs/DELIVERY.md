@@ -85,3 +85,9 @@ Para cada Issue exigir: SHA, mudanças implementadas, testes executados e result
 - Arquivos alterados apenas `public/index.html`, `public/b18.js`, `public/b18.css`, `public/service-worker.js` (cache público), testes de regressão, `docs/B18H_HANDOFF.md` e este ledger. Imutáveis: 32 sessões, `schedule.json`, `schedule-utils.js`, logo, manifest, quatro PNG PWA, persistência e backup.
 - Chromium DOM QA 320/360/390/412/768/1280 PASS, regressão B18-E/F/G PASS, backup export/import e legacy reload PASS; HTTP GET localhost via urllib PASS (7 assets), HTTP browser Vercel/Android real NOT_RUN. Contraste evento serviço 6,23:1; botão retirada 8,14:1. Não declarar smoke externo.
 - Pacote auditável SHA-256 `fa1b4fcfb48d624efd55aa45d3f8c607e8afb8bf936851320d3a110a36c492ed`, https://drive.google.com/file/d/12jlQLnrchB5mYBSK6LmPInyWFvlkLw9I/view . Após deploy, URL/ID/commit/status serão registrados na Issue #3. Nunca promover automaticamente URL estável B17 `dpl_AU2bxMsMMbThebHSYnZ2VdbFJk57`. Próximo gate é QA do proprietário na preview e migração manual por backup devido a origens distintas.
+
+
+### B18-H preview READY, QA proprietário pendente
+- Vercel deployment `dpl_CA7iFzunjZcFCKBjkDAk8DdzYLWm` READY, https://conahp-flora-2026-qszf63fjn-joao-moraes-projects-9bc51b2e.vercel.app/ ; 12 assets SHA1 conferidos, commit `cd017ab32f60979bffa19d8002eda346607215cc`.
+- Arquivos de aplicação alterados: `public/b18.js`, `public/b18.css`, `public/index.html`, `public/service-worker.js` (cache de ativos públicos). QA Chromium seis larguras/novos filtros/reload/backup PASS, GET localhost PASS, HTTP browser real/Android NOT_RUN. Pacote https://drive.google.com/file/d/12jlQLnrchB5mYBSK6LmPInyWFvlkLw9I/view SHA256 `fa1b4fcfb48d624efd55aa45d3f8c607e8afb8bf936851320d3a110a36c492ed`.
+- Alias estável permanece na B17 `dpl_AU2bxMsMMbThebHSYnZ2VdbFJk57`. Nenhuma promoção. Status `B18_H_READY_FOR_OWNER_QA`; conferir localStorage distinto por URL, exportar/importar backup.
