@@ -57,3 +57,9 @@ Para cada Issue exigir: SHA, mudanças implementadas, testes executados e result
 - Verificações Chromium simuladas: JS parse PASS; nova QA B18-F 320/360/390/412/768/1280 PASS; regressão B18 original PASS seis larguras; reload/legados PASS. Paleta com contraste >=4,5 em botões, serviço sem CTA, Boas-vindas cabe, modal safe-area e fechamento, rascunho e ausência de overwrite de decisão anterior, backup JSON PASS. 32 sessões oficiais e todos os PNG/manifest/logo mantidos BYTE-FOR-BYTE. Sem prova HTTP externa/mobile físico.
 - Pacote auditável B18-F SHA-256 `5046fd41fe5ed1170dcbd08514262135cbf354495139e76c5e47084057c903f6` no Drive: https://drive.google.com/file/d/1Zguye22oOKlM1sVvVzVrzCMmn8W1rXbm/view . Preview nova e hash de commit reportados na Issue #3 após implantação. Status `B18_F_READY_FOR_OWNER_QA` significa candidata em preview, não produção liberada.
 - Preservar production alias B17 `dpl_AU2bxMsMMbThebHSYnZ2VdbFJk57`. Dados localStorage específicos de domínio, portanto owner QA requer backup/exportação do endereço original. Cloudflare, RIW, Apps Script, Sheets, Blob 403 intocados.
+
+
+### B18-F - preview deploy dpl_Ex3YfvoJeD7AHdnbfLU4xmcWfimq READY
+- URL https://conahp-flora-2026-rohbj0dzy-joao-moraes-projects-9bc51b2e.vercel.app/ . 12 assets Vercel verificados, B17 ainda com o alias estável. Smoke HTTPS NOT_RUN por DNS externo bloqueado; validação Android real pendente.
+- Revisão de modal, status, botões e serviço entregue no commit `ccd27e7cecf63a43c47837565fc1428db59cdaf9`; teste 320/360/390/412/768/1280 PASS. ZIP em https://drive.google.com/file/d/1Zguye22oOKlM1sVvVzVrzCMmn8W1rXbm/view.
+- Status: B18_F_READY_FOR_OWNER_QA. Próximo gate: exportar backup da B17, avaliar preview e decidir promoção expressamente.
