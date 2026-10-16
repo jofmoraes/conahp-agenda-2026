@@ -33,6 +33,20 @@ jobs:
           unzip -q "ci/CONAHP_B19_A2_GOOGLE_LOGIN_DELTA_QA.zip" -d ./ci/b19-sandbox
           test -f ./ci/b19-sandbox/package-lock.json
           test -f ./ci/b19-sandbox/tests/b19-authjs-real.test.mjs
+      - name: Correct provider-option assertion in test only
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path("ci/b19-sandbox/tests/b19-authjs-real.test.mjs")
+          src = p.read_text()
+          old = "assert.deepEqual(c.providers[0].checks,['pkce','state','nonce']);"
+          new = "assert.deepEqual(c.providers[0].options.checks,['pkce','state','nonce']);"
+          assert src.count(old) == 1, "Unexpected upstream test content; refusing to patch"
+          p.write_text(src.replace(old, new))
+          print("Test-only assertion corrected for real @auth/core Google provider option wrapper")
+          PY
       - name: Install exact pinned Auth.js and dependencies
         working-directory: ./ci/b19-sandbox
         run: npm ci --ignore-scripts --no-audit --no-fund
