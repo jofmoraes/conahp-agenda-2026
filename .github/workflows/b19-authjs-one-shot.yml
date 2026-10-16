@@ -1,0 +1,57 @@
+name: B19 Auth.js - one-time isolated npm verification
+on:
+  push:
+    branches:
+      - ci/b19-authjs-once-20261016
+    paths:
+      - .github/workflows/b19-authjs-one-shot.yml
+permissions:
+  contents: read
+jobs:
+  authjs-real:
+    if: github.ref_name == 'ci/b19-authjs-once-20261016'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      CI: 'true'
+      NODE_ENV: 'test'
+    steps:
+      - name: Checkout isolated branch only
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Use Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify original immutable input and extract
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "2ab83d9b582b3f36c1703db26e8470beb9ddf20dac481b312668b19d387d1b6d  ci/CONAHP_B19_A2_GOOGLE_LOGIN_DELTA_QA.zip" | sha256sum -c -
+          mkdir -p ./ci/b19-sandbox
+          unzip -q "ci/CONAHP_B19_A2_GOOGLE_LOGIN_DELTA_QA.zip" -d ./ci/b19-sandbox
+          test -f ./ci/b19-sandbox/package-lock.json
+          test -f ./ci/b19-sandbox/tests/b19-authjs-real.test.mjs
+      - name: Install exact pinned Auth.js and dependencies
+        working-directory: ./ci/b19-sandbox
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Verify installed library version
+        working-directory: ./ci/b19-sandbox
+        run: npm ls @auth/core
+      - name: Real Auth.js JWT cookie session and CSRF tests
+        working-directory: ./ci/b19-sandbox
+        run: npm run test:authjs
+      - name: Synthetic regression tests
+        if: always()
+        working-directory: ./ci/b19-sandbox
+        run: npm test
+      - name: Syntax verification
+        if: always()
+        working-directory: ./ci/b19-sandbox
+        run: npm run check
+      - name: Security advisory report (informational)
+        if: always()
+        continue-on-error: true
+        working-directory: ./ci/b19-sandbox
+        run: npm audit --omit=dev --audit-level=high
