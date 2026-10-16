@@ -1,4 +1,4 @@
-name: B19 Auth.js - one-time isolated npm verification
+name: B19 Auth.js - isolated OIDC controlled integration QA
 on:
   push:
     branches:
@@ -28,32 +28,19 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          echo "2ab83d9b582b3f36c1703db26e8470beb9ddf20dac481b312668b19d387d1b6d  ci/CONAHP_B19_A2_GOOGLE_LOGIN_DELTA_QA.zip" | sha256sum -c -
+          echo "f10632a3cbbbaeb1e1f743432d0009aa0134195ecb8a8501571b23818a74afe6  ci/CONAHP_B19_A3_GOOGLE_LOGIN_OIDC_QA.zip" | sha256sum -c -
           mkdir -p ./ci/b19-sandbox
-          unzip -q "ci/CONAHP_B19_A2_GOOGLE_LOGIN_DELTA_QA.zip" -d ./ci/b19-sandbox
+          unzip -q "ci/CONAHP_B19_A3_GOOGLE_LOGIN_OIDC_QA.zip" -d ./ci/b19-sandbox
           test -f ./ci/b19-sandbox/package-lock.json
           test -f ./ci/b19-sandbox/tests/b19-authjs-real.test.mjs
-      - name: Correct provider-option assertion in test only
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 - <<'PY'
-          from pathlib import Path
-          p = Path("ci/b19-sandbox/tests/b19-authjs-real.test.mjs")
-          src = p.read_text()
-          old = "assert.deepEqual(c.providers[0].checks,['pkce','state','nonce']);"
-          new = "assert.deepEqual(c.providers[0].options.checks,['pkce','state','nonce']);"
-          assert src.count(old) == 1, "Unexpected upstream test content; refusing to patch"
-          p.write_text(src.replace(old, new))
-          print("Test-only assertion corrected for real @auth/core Google provider option wrapper")
-          PY
+          test -f ./ci/b19-sandbox/tests/b19-oidc-controlled.test.mjs
       - name: Install exact pinned Auth.js and dependencies
         working-directory: ./ci/b19-sandbox
         run: npm ci --ignore-scripts --no-audit --no-fund
       - name: Verify installed library version
         working-directory: ./ci/b19-sandbox
         run: npm ls @auth/core
-      - name: Real Auth.js JWT cookie session and CSRF tests
+      - name: Real Auth.js OIDC PKCE state nonce JWT and CSRF tests
         working-directory: ./ci/b19-sandbox
         run: npm run test:authjs
       - name: Synthetic regression tests
